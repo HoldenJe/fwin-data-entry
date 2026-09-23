@@ -1,0 +1,5 @@
+[project]
+name = "fwin-data-entry"
+version = "0.1.0"
+description = "FWIN fisheries data entry application"
+requires-python = ">=3.11"

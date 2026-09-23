@@ -1,0 +1,17 @@
+# virtual environment
+.venv/
+
+# python
+__pycache__/
+*.pyc
+
+# vscode / positron
+.vscode/
+
+# sqlite databases
+*.sqlite
+*.db
+
+# operating system
+.DS_Store
+Thumbs.db
