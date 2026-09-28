@@ -2,12 +2,16 @@
 
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.project import Project
+from fwin_data_entry.services.validation import validate_required
 
 def create_project(
     db_path: str,
     project: Project,
 ) -> None:
     """Insert a project into FN011."""
+    validate_required(project.prj_cd, "PRJ_CD")
+    validate_required(project.prj_nm, "PRJ_NM")
+    validate_required(project.wby_nm, "WBY_NM")
 
     with get_connection(db_path) as conn:
         conn.execute(
