@@ -91,3 +91,26 @@ def get_effort(
         )
 
         return cursor.fetchone()
+
+def get_next_sam(
+    db_path: str,
+    prj_cd: str,
+) -> int:
+    """Return the next available SAM value."""
+
+    with get_connection(db_path) as conn:
+        cursor = conn.execute(
+            """
+            SELECT MAX(SAM)
+            FROM FN121
+            WHERE PRJ_CD = ?
+            """,
+            (prj_cd,),
+        )
+
+        result = cursor.fetchone()[0]
+
+    if result is None:
+        return 1
+
+    return result + 1
