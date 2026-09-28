@@ -9,6 +9,7 @@ def create_project(
     project: Project,
 ) -> None:
     """Insert a project into FN011."""
+    
     validate_required(project.prj_cd, "PRJ_CD")
     validate_required(project.prj_nm, "PRJ_NM")
     validate_required(project.wby_nm, "WBY_NM")
