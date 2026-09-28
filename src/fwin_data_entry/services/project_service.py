@@ -1,16 +1,11 @@
 """Project services."""
 
 from fwin_data_entry.database.connection import get_connection
-
+from fwin_data_entry.models.project import Project
 
 def create_project(
     db_path: str,
-    prj_cd: str,
-    prj_nm: str,
-    wby_nm: str,
-    prj_date0: str,
-    prj_date1: str,
-    comment: str = "",
+    project: Project,
 ) -> None:
     """Insert a project into FN011."""
 
@@ -28,17 +23,16 @@ def create_project(
             VALUES (?, ?, ?, ?, ?, ?)
             """,
             (
-                prj_cd,
-                prj_nm,
-                wby_nm,
-                prj_date0,
-                prj_date1,
-                comment,
+                project.prj_cd,
+                project.prj_nm,
+                project.wby_nm,
+                project.prj_date0,
+                project.prj_date1,
+                project.comment,
             ),
         )
 
         conn.commit()
-
 
 def get_project(db_path: str, prj_cd: str):
     """Retrieve a project record."""
