@@ -2,14 +2,23 @@
 
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.effort import Effort
-
+from fwin_data_entry.services.validation import (
+    validate_required,
+    validate_positive_integer,
+)
 
 def create_effort(
     db_path: str,
     effort: Effort,
 ) -> None:
     """Insert an effort record."""
+    
+    validate_required(effort.prj_cd, "PRJ_CD")
+    validate_required(effort.gr, "GR")
+    validate_required(effort.area, "AREA")
 
+    validate_positive_integer(effort.sam, "SAM")
+    
     with get_connection(db_path) as conn:
         conn.execute(
             """
