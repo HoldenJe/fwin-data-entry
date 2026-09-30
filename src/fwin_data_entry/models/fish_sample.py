@@ -22,7 +22,7 @@ class FishSample:
 
     agest: str = ""
     stom: str = ""
-    tax: str = ""
+    taxon: str = ""
 
     gonwt: float | None = None
     eviswt: float | None = None
