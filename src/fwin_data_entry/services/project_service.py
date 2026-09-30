@@ -3,6 +3,7 @@
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.validation import validate_required
+from fwin_data_entry.models.project import Project
 
 def create_project(
     db_path: str,
@@ -39,7 +40,10 @@ def create_project(
 
         conn.commit()
 
-def get_project(db_path: str, prj_cd: str):
+def get_project(
+    db_path: str,
+    prj_cd: str,
+) -> Project | None:
     """Retrieve a project record."""
 
     with get_connection(db_path) as conn:
@@ -52,4 +56,16 @@ def get_project(db_path: str, prj_cd: str):
             (prj_cd,),
         )
 
-        return cursor.fetchone()
+        row = cursor.fetchone()
+
+    if row is None:
+        return None
+
+    return Project(
+        prj_cd=row[0],
+        prj_nm=row[1],
+        wby_nm=row[2],
+        prj_date0=row[3],
+        prj_date1=row[4],
+        comment=row[5],
+    )
