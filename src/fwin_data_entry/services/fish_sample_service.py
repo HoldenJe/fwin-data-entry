@@ -87,3 +87,37 @@ def get_fish_sample(
         )
 
         return cursor.fetchone()
+
+def get_next_fish(
+    db_path: str,
+    prj_cd: str,
+    sam: int,
+    eff: int,
+    spc: int,
+) -> int:
+    """Return the next available fish number."""
+
+    with get_connection(db_path) as conn:
+        cursor = conn.execute(
+            """
+            SELECT MAX(FISH)
+            FROM FN125
+            WHERE PRJ_CD = ?
+              AND SAM = ?
+              AND EFF = ?
+              AND SPC = ?
+            """,
+            (
+                prj_cd,
+                sam,
+                eff,
+                spc,
+            ),
+        )
+
+        result = cursor.fetchone()[0]
+
+    if result is None:
+        return 1
+
+    return result + 1
