@@ -73,7 +73,7 @@ def get_effort(
     db_path: str,
     prj_cd: str,
     sam: int,
-):
+) -> Effort | None:
     """Retrieve an effort record."""
 
     with get_connection(db_path) as conn:
@@ -90,8 +90,32 @@ def get_effort(
             ),
         )
 
-        return cursor.fetchone()
+        row = cursor.fetchone()
 
+    if row is None:
+        return None
+
+    return Effort(
+        prj_cd=row[0],
+        sam=row[1],
+        eff=row[2],
+        gr=row[3],
+        area=row[4],
+        effdt0=row[5],
+        efftm0=row[6],
+        sitem0=row[7],
+        dd_lon0=row[8],
+        dd_lat0=row[9],
+        secchi=row[10],
+        grdepmin=row[11],
+        grdepmax=row[12],
+        effdt1=row[13],
+        efftm1=row[14],
+        effst=row[15],
+        comment=row[16],
+        crew=row[17],
+    )
+    
 def get_next_sam(
     db_path: str,
     prj_cd: str,
