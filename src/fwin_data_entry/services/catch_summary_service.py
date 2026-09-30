@@ -2,14 +2,39 @@
 
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.catch_summary import CatchSummary
-
+from fwin_data_entry.services.validation import (
+    validate_required,
+    validate_positive_integer,
+    validate_non_negative_integer,
+    validate_biocnt,
+)
 
 def create_catch_summary(
     db_path: str,
     catch_summary: CatchSummary,
 ) -> None:
     """Insert an FN123 record."""
+    validate_required(catch_summary.prj_cd, "PRJ_CD")
 
+    validate_positive_integer(catch_summary.sam, "SAM")
+    validate_positive_integer(catch_summary.eff, "EFF")
+    validate_positive_integer(catch_summary.spc, "SPC")
+
+    validate_non_negative_integer(
+        catch_summary.catcnt,
+        "CATCNT",
+    )
+
+    validate_non_negative_integer(
+        catch_summary.biocnt,
+        "BIOCNT",
+    )
+
+    validate_biocnt(
+        catch_summary.catcnt,
+        catch_summary.biocnt,
+    )
+    
     with get_connection(db_path) as conn:
         conn.execute(
             """
