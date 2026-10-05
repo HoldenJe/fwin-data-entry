@@ -63,7 +63,7 @@ def get_fish_sample(
     eff: int,
     spc: int,
     fish: int,
-):
+) -> FishSample | None:
     """Retrieve an FN125 record."""
 
     with get_connection(db_path) as conn:
@@ -86,8 +86,30 @@ def get_fish_sample(
             ),
         )
 
-        return cursor.fetchone()
+        row = cursor.fetchone()
 
+    if row is None:
+        return None
+
+    return FishSample(
+        prj_cd=row[0],
+        sam=row[1],
+        eff=row[2],
+        spc=row[3],
+        fish=row[4],
+        flen=row[5],
+        tlen=row[6],
+        rwt=row[7],
+        sex=row[8],
+        mat=row[9],
+        agest=row[10],
+        stom=row[11],
+        taxon=row[12],
+        gonwt=row[13],
+        eviswt=row[14],
+        tissue=row[15],
+    )
+    
 def get_next_fish(
     db_path: str,
     prj_cd: str,

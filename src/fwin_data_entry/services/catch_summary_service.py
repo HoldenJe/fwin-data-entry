@@ -67,7 +67,7 @@ def get_catch_summary(
     sam: int,
     eff: int,
     spc: int,
-):
+) -> CatchSummary | None:
     """Retrieve an FN123 record."""
 
     with get_connection(db_path) as conn:
@@ -88,4 +88,16 @@ def get_catch_summary(
             ),
         )
 
-        return cursor.fetchone()
+        row = cursor.fetchone()
+
+    if row is None:
+        return None
+
+    return CatchSummary(
+        prj_cd=row[0],
+        sam=row[1],
+        eff=row[2],
+        spc=row[3],
+        catcnt=row[4],
+        biocnt=row[5],
+    )
