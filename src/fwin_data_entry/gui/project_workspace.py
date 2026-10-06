@@ -38,3 +38,11 @@ class ProjectWorkspace(QWidget):
         layout.addLayout(right_layout, 3)
 
         self.setLayout(layout)
+
+    def set_sample_details(
+        self,
+        text: str,
+    ):
+        """Display sample details."""
+
+        self.sample_details.setText(text)

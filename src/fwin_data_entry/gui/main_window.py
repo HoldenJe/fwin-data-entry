@@ -52,6 +52,7 @@ from fwin_data_entry.services.project_service import (
 )
 from fwin_data_entry.services.workspace_service import (
     get_project_samples,
+    get_sample_details,
 )
 
 
@@ -201,6 +202,9 @@ class MainWindow(QMainWindow):
             self.workspace.sam_list.addItem(
                 f"SAM {sam}"
             )
+        self.workspace.sam_list.itemClicked.connect(
+            self.select_sample
+        )
 
     def new_effort(self):
         """Open effort dialog."""
@@ -370,4 +374,35 @@ class MainWindow(QMainWindow):
                 f"Saved fish {record.fish} "
                 f"for SPC {record.spc}"
             ),
+        )
+
+    def select_sample(self, item):
+        """Display sample information."""
+
+        sam = int(
+            item.text().replace(
+                "SAM ",
+                "",
+            )
+        )
+
+        effort = get_sample_details(
+            self.current_database,
+            self.current_project.prj_cd,
+            sam,
+        )
+
+        if effort is None:
+            return
+
+        self.workspace.set_sample_details(
+            
+                f"Sample: {effort.sam}\n\n"
+                f"GR: {effort.gr}\n"
+                f"Area: {effort.area}\n"
+                f"Set Date: {effort.effdt0}\n"
+                f"Set Time: {effort.efftm0}\n"
+                f"Secchi: {effort.secchi}\n"
+                f"Crew: {effort.crew}"
+            
         )
