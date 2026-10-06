@@ -20,7 +20,7 @@ def get_sample_details(
         prj_cd,
         sam,
     )
-    
+
 def get_project_samples(
     db_path: str,
 ):
@@ -39,3 +39,22 @@ def get_project_samples(
             row[0]
             for row in cursor.fetchall()
         ]
+
+def get_sample_catch_summaries(
+    db_path: str,
+    sam: int,
+):
+    """Return FN123 records for a sample."""
+
+    with get_connection(db_path) as conn:
+        cursor = conn.execute(
+            """
+            SELECT SPC, CATCNT, BIOCNT
+            FROM FN123
+            WHERE SAM = ?
+            ORDER BY SPC
+            """,
+            (sam,),
+        )
+
+        return cursor.fetchall()

@@ -52,6 +52,7 @@ from fwin_data_entry.services.project_service import (
 )
 from fwin_data_entry.services.workspace_service import (
     get_project_samples,
+    get_sample_catch_summaries,
     get_sample_details,
 )
 
@@ -406,3 +407,26 @@ class MainWindow(QMainWindow):
                 f"Crew: {effort.crew}"
             
         )
+
+        summaries = get_sample_catch_summaries(
+            self.current_database,
+            sam,
+        )
+
+        if summaries:
+            text = "FN123\n------\n"
+
+            for spc, catcnt, biocnt in summaries:
+                text += (
+                    f"SPC {spc}"
+                    f"  CATCNT={catcnt}"
+                    f"  BIOCNT={biocnt}\n"
+                )
+
+            self.workspace.catch_summary_label.setText(
+                text
+            )
+        else:
+            self.workspace.catch_summary_label.setText(
+                "No catch summaries"
+            )
