@@ -13,12 +13,14 @@ from PySide6.QtWidgets import (
 class EffortDialog(QDialog):
     """FN121 effort entry dialog."""
 
-    def __init__(self):
+    def __init__(self, sam: int | None = None):
         super().__init__()
 
         self.setWindowTitle("New Effort")
 
         self.sam = QLineEdit()
+        if sam is not None:
+            self.sam.setText(str(sam))
         self.gr = QLineEdit()
         self.area = QLineEdit()
 

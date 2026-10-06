@@ -19,11 +19,16 @@ from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
 from fwin_data_entry.models.project import Project
+from fwin_data_entry.services.effort_service import (
+    create_effort,
+    get_next_sam,
+)
 from fwin_data_entry.services.project_service import (
     create_project,
     get_first_project,
 )
 
+from fwin_data_entry.models.effort import Effort
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -153,7 +158,55 @@ class MainWindow(QMainWindow):
     def new_effort(self):
         """Open effort dialog."""
 
-        dialog = EffortDialog()
+        if self.current_project is None:
+            QMessageBox.warning(
+                self,
+                "No Project",
+                "Open a project first.",
+            )
+            return
 
-        if dialog.exec():
-            print(dialog.get_data())
+        next_sam = get_next_sam(
+            self.current_database,
+            self.current_project.prj_cd,
+        )
+
+        dialog = EffortDialog(
+            sam=next_sam,
+        )
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        effort = Effort(
+            prj_cd=self.current_project.prj_cd,
+            sam=int(data["sam"]),
+            gr=data["gr"],
+            area=data["area"],
+            effdt0=data["effdt0"],
+            efftm0=data["efftm0"],
+            dd_lat0=float(data["dd_lat0"])
+            if data["dd_lat0"]
+            else None,
+            dd_lon0=float(data["dd_lon0"])
+            if data["dd_lon0"]
+            else None,
+            secchi=float(data["secchi"])
+            if data["secchi"]
+            else None,
+            crew=data["crew"],
+            comment=data["comment"],
+        )
+
+        create_effort(
+            self.current_database,
+            effort,
+        )
+
+        QMessageBox.information(
+            self,
+            "Success",
+            f"Saved SAM {effort.sam}",
+        )
