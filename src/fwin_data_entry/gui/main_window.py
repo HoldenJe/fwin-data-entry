@@ -18,6 +18,9 @@ from fwin_data_entry.gui.catch_summary_dialog import (
 from fwin_data_entry.gui.effort_dialog import (
     EffortDialog,
 )
+from fwin_data_entry.gui.fish_sample_dialog import (
+    FishSampleDialog,
+)
 from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
@@ -25,6 +28,9 @@ from fwin_data_entry.models.catch_summary import (
     CatchSummary,
 )
 from fwin_data_entry.models.effort import Effort
+from fwin_data_entry.models.fish_sample import (
+    FishSample,
+)
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.catch_summary_service import (
     create_catch_summary,
@@ -32,6 +38,10 @@ from fwin_data_entry.services.catch_summary_service import (
 from fwin_data_entry.services.effort_service import (
     create_effort,
     get_next_sam,
+)
+from fwin_data_entry.services.fish_sample_service import (
+    create_fish_sample,
+    get_next_fish,
 )
 from fwin_data_entry.services.project_service import (
     create_project,
@@ -94,10 +104,19 @@ class MainWindow(QMainWindow):
                 self.new_effort
             )
 
+        new_fish_action = file_menu.addAction(
+            "New Fish Sample"
+        )
+
+        new_fish_action.triggered.connect(
+            self.new_fish_sample
+        )
+
         file_menu.addSeparator()
 
         exit_action = file_menu.addAction("Exit")
         exit_action.triggered.connect(self.close)
+
 
     def new_project(self):
         """Create a new project."""
@@ -263,6 +282,79 @@ class MainWindow(QMainWindow):
             "Success",
             (
                 f"Saved catch summary "
+                f"for SPC {record.spc}"
+            ),
+        )
+    
+    def new_fish_sample(self):
+        """Create FN125 record."""
+
+        if self.current_project is None:
+            QMessageBox.warning(
+                self,
+                "No Project",
+                "Open a project first.",
+            )
+            return
+
+        dialog = FishSampleDialog()
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        next_fish = get_next_fish(
+            self.current_database,
+            self.current_project.prj_cd,
+            int(data["sam"]),
+            999,
+            int(data["spc"]),
+        )
+
+        record = FishSample(
+            prj_cd=self.current_project.prj_cd,
+            sam=int(data["sam"]),
+            eff=999,
+            spc=int(data["spc"]),
+            fish=next_fish,
+            flen=float(data["flen"])
+            if data["flen"]
+            else None,
+            tlen=float(data["tlen"])
+            if data["tlen"]
+            else None,
+            rwt=float(data["rwt"])
+            if data["rwt"]
+            else None,
+            sex=int(data["sex"])
+            if data["sex"]
+            else None,
+            mat=int(data["mat"])
+            if data["mat"]
+            else None,
+            agest=data["agest"],
+            stom=data["stom"],
+            taxon=data["taxon"],
+            gonwt=float(data["gonwt"])
+            if data["gonwt"]
+            else None,
+            eviswt=float(data["eviswt"])
+            if data["eviswt"]
+            else None,
+            tissue=data["tissue"],
+        )
+
+        create_fish_sample(
+            self.current_database,
+            record,
+        )
+
+        QMessageBox.information(
+            self,
+            "Success",
+            (
+                f"Saved fish {record.fish} "
                 f"for SPC {record.spc}"
             ),
         )
