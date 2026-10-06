@@ -69,3 +69,27 @@ def get_project(
         prj_date1=row[4],
         comment=row[5],
     )
+
+def get_first_project(
+    db_path: str,
+):
+    """Return the first FN011 record."""
+
+    with get_connection(db_path) as conn:
+        cursor = conn.execute(
+            """
+            SELECT PRJ_CD
+            FROM FN011
+            LIMIT 1
+            """
+        )
+
+        row = cursor.fetchone()
+
+    if row is None:
+        return None
+
+    return get_project(
+        db_path,
+        row[0],
+    )

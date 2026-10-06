@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from PySide6.QtWidgets import (
+    QFileDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
@@ -17,6 +18,7 @@ from fwin_data_entry.gui.project_dialog import (
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.project_service import (
     create_project,
+    get_first_project,
 )
 
 
@@ -28,10 +30,16 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("FWIN Data Entry")
 
-        label = QLabel("FWIN Data Entry")
-        label.setMargin(20)
+        self.project_label = QLabel("No project loaded")
 
-        self.setCentralWidget(label)
+        self.project_label.setMargin(20)
+
+        self.setCentralWidget(
+            self.project_label
+        )
+
+        self.current_project = None
+        self.current_database = None
 
         self._create_menu()
 
@@ -95,10 +103,37 @@ class MainWindow(QMainWindow):
         )
 
     def open_project(self):
-        """Placeholder open project action."""
+        """Open an existing project."""
 
-        QMessageBox.information(
+        filename, _ = QFileDialog.getOpenFileName(
             self,
             "Open Project",
-            "Open Project not implemented yet.",
+            "data/projects",
+            "SQLite Database (*.sqlite)",
         )
+
+        if not filename:
+            return
+
+        project = get_first_project(
+            filename,
+        )
+
+        if project is None:
+            QMessageBox.warning(
+                self,
+                "Error",
+                "No project found.",
+            )
+            return
+
+        self.current_project = project
+        self.current_database = filename
+
+        self.project_label.setText(
+            (
+                f"Project: {project.prj_cd}\n"
+                f"Name: {project.prj_nm}\n"
+                f"Waterbody: {project.wby_nm}"
+            )
+    )
