@@ -1,0 +1,60 @@
+"""Project creation dialog."""
+
+from PySide6.QtWidgets import (
+    QDialog,
+    QFormLayout,
+    QLineEdit,
+    QTextEdit,
+    QPushButton,
+    QVBoxLayout,
+)
+
+
+class ProjectDialog(QDialog):
+    """Project creation dialog."""
+
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("New Project")
+
+        self.prj_cd = QLineEdit()
+        self.prj_nm = QLineEdit()
+        self.wby_nm = QLineEdit()
+        self.start_date = QLineEdit()
+        self.end_date = QLineEdit()
+        self.comment = QTextEdit()
+
+        form = QFormLayout()
+
+        form.addRow("Project Code", self.prj_cd)
+        form.addRow("Project Name", self.prj_nm)
+        form.addRow("Waterbody", self.wby_nm)
+        form.addRow("Start Date", self.start_date)
+        form.addRow("End Date", self.end_date)
+        form.addRow("Comment", self.comment)
+
+        ok_button = QPushButton("OK")
+        ok_button.clicked.connect(self.accept)
+
+        cancel_button = QPushButton("Cancel")
+        cancel_button.clicked.connect(self.reject)
+
+        layout = QVBoxLayout()
+        layout.addLayout(form)
+        layout.addWidget(ok_button)
+        layout.addWidget(cancel_button)
+
+        self.setLayout(layout)
+
+    def get_data(self) -> dict:
+        """Return dialog values."""
+
+        return {
+            "prj_cd": self.prj_cd.text(),
+            "prj_nm": self.prj_nm.text(),
+            "wby_nm": self.wby_nm.text(),
+            "prj_date0": self.start_date.text(),
+            "prj_date1": self.end_date.text(),
+            "comment": self.comment.toPlainText(),
+        }

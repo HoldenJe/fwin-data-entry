@@ -6,6 +6,9 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
+from fwin_data_entry.gui.project_dialog import (
+    ProjectDialog,
+)
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -45,13 +48,16 @@ class MainWindow(QMainWindow):
         exit_action.triggered.connect(self.close)
 
     def new_project(self):
-        """Placeholder new project action."""
+        """Open project creation dialog."""
 
-        QMessageBox.information(
-            self,
-            "New Project",
-            "New Project not implemented yet.",
-        )
+        dialog = ProjectDialog()
+
+        if dialog.exec():
+            project_data = dialog.get_data()
+
+            print(project_data)
+        else:
+            print("Project cancelled")
 
     def open_project(self):
         """Placeholder open project action."""
