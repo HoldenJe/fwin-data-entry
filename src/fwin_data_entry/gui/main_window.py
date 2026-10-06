@@ -12,6 +12,9 @@ from PySide6.QtWidgets import (
 from fwin_data_entry.database.initialize import (
     initialize_database,
 )
+from fwin_data_entry.gui.effort_dialog import (
+    EffortDialog,
+)
 from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
@@ -59,6 +62,15 @@ class MainWindow(QMainWindow):
         open_project_action.triggered.connect(
             self.open_project
         )
+        file_menu.addSeparator()
+
+        new_effort_action = file_menu.addAction(
+                "New Effort"
+            )
+
+        new_effort_action.triggered.connect(
+                self.new_effort
+            )
 
         file_menu.addSeparator()
 
@@ -131,9 +143,17 @@ class MainWindow(QMainWindow):
         self.current_database = filename
 
         self.project_label.setText(
-            (
                 f"Project: {project.prj_cd}\n"
                 f"Name: {project.prj_nm}\n"
                 f"Waterbody: {project.wby_nm}"
             )
-    )
+
+    
+
+    def new_effort(self):
+        """Open effort dialog."""
+
+        dialog = EffortDialog()
+
+        if dialog.exec():
+            print(dialog.get_data())
