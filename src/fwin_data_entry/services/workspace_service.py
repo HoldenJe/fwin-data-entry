@@ -58,3 +58,26 @@ def get_sample_catch_summaries(
         )
 
         return cursor.fetchall()
+
+def get_sample_fish(
+    db_path: str,
+    sam: int,
+):
+    """Return FN125 records for a sample."""
+
+    with get_connection(db_path) as conn:
+        cursor = conn.execute(
+            """
+            SELECT
+                FISH,
+                SPC,
+                TLEN,
+                RWT
+            FROM FN125
+            WHERE SAM = ?
+            ORDER BY SPC, FISH
+            """,
+            (sam,),
+        )
+
+        return cursor.fetchall()

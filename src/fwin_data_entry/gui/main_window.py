@@ -54,6 +54,7 @@ from fwin_data_entry.services.workspace_service import (
     get_project_samples,
     get_sample_catch_summaries,
     get_sample_details,
+    get_sample_fish,
 )
 
 
@@ -429,4 +430,32 @@ class MainWindow(QMainWindow):
         else:
             self.workspace.catch_summary_label.setText(
                 "No catch summaries"
+            )
+
+        fish_records = get_sample_fish(
+            self.current_database,
+            sam,
+        )
+
+        if fish_records:
+
+            text = "FN125\n------\n\n"
+
+            for fish, spc, tlen, rwt in fish_records:
+
+                text += (
+                    f"Fish {fish}"
+                    f"  SPC={spc}"
+                    f"  TLEN={tlen}"
+                    f"  RWT={rwt}\n"
+                )
+
+            self.workspace.fish_label.setText(
+                text
+            )
+
+        else:
+
+            self.workspace.fish_label.setText(
+                "No fish samples"
             )

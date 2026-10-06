@@ -26,6 +26,9 @@ class ProjectWorkspace(QWidget):
         self.catch_summary_label = QLabel(
             "No catch summaries"
         )
+        self.fish_label = QLabel(
+            "No fish samples"
+        )
         left_layout = QVBoxLayout()
         left_layout.addWidget(QLabel("Samples"))
         left_layout.addWidget(self.sam_list)
@@ -34,6 +37,7 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(self.project_label)
         right_layout.addWidget(self.sample_details)
         right_layout.addWidget(self.catch_summary_label)
+        right_layout.addWidget(self.fish_label)
 
         layout = QHBoxLayout()
 
