@@ -1,14 +1,24 @@
 """Main application window."""
 
+from pathlib import Path
+
 from PySide6.QtWidgets import (
     QLabel,
     QMainWindow,
     QMessageBox,
 )
 
+from fwin_data_entry.database.initialize import (
+    initialize_database,
+)
 from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
+from fwin_data_entry.models.project import Project
+from fwin_data_entry.services.project_service import (
+    create_project,
+)
+
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -48,16 +58,41 @@ class MainWindow(QMainWindow):
         exit_action.triggered.connect(self.close)
 
     def new_project(self):
-        """Open project creation dialog."""
+        """Create a new project."""
 
         dialog = ProjectDialog()
 
-        if dialog.exec():
-            project_data = dialog.get_data()
+        if not dialog.exec():
+            return
 
-            print(project_data)
-        else:
-            print("Project cancelled")
+        data = dialog.get_data()
+
+        db_path = (
+            Path("data/projects")
+            / f"{data['prj_cd']}.sqlite"
+        )
+
+        initialize_database(str(db_path))
+
+        project = Project(
+            prj_cd=data["prj_cd"],
+            prj_nm=data["prj_nm"],
+            wby_nm=data["wby_nm"],
+            prj_date0=data["prj_date0"],
+            prj_date1=data["prj_date1"],
+            comment=data["comment"],
+        )
+
+        create_project(
+            str(db_path),
+            project,
+        )
+
+        QMessageBox.information(
+            self,
+            "Success",
+            f"Project created:\n{db_path}",
+        )
 
     def open_project(self):
         """Placeholder open project action."""

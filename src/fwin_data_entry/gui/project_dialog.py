@@ -4,8 +4,8 @@ from PySide6.QtWidgets import (
     QDialog,
     QFormLayout,
     QLineEdit,
-    QTextEdit,
     QPushButton,
+    QTextEdit,
     QVBoxLayout,
 )
 
