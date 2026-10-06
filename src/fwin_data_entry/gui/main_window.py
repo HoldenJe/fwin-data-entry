@@ -24,6 +24,9 @@ from fwin_data_entry.gui.fish_sample_dialog import (
 from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
+from fwin_data_entry.gui.project_workspace import (
+    ProjectWorkspace,
+)
 from fwin_data_entry.models.catch_summary import (
     CatchSummary,
 )
@@ -47,6 +50,9 @@ from fwin_data_entry.services.project_service import (
     create_project,
     get_first_project,
 )
+from fwin_data_entry.services.workspace_service import (
+    get_project_samples,
+)
 
 
 class MainWindow(QMainWindow):
@@ -57,12 +63,10 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("FWIN Data Entry")
 
-        self.project_label = QLabel("No project loaded")
-
-        self.project_label.setMargin(20)
+        self.workspace = ProjectWorkspace()
 
         self.setCentralWidget(
-            self.project_label
+            self.workspace
         )
 
         self.current_project = None
@@ -183,10 +187,19 @@ class MainWindow(QMainWindow):
         self.current_project = project
         self.current_database = filename
 
-        self.project_label.setText(
+        self.workspace.project_label.setText(
                 f"Project: {project.prj_cd}\n"
                 f"Name: {project.prj_nm}\n"
-                f"Waterbody: {project.wby_nm}"
+                f"Waterbody: {project.wby_nm}"           
+        )
+
+        self.workspace.sam_list.clear()
+
+        for sam in get_project_samples(
+            filename
+        ):
+            self.workspace.sam_list.addItem(
+                f"SAM {sam}"
             )
 
     def new_effort(self):
