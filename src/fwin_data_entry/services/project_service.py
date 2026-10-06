@@ -3,7 +3,7 @@
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.validation import validate_required
-from fwin_data_entry.models.project import Project
+
 
 def create_project(
     db_path: str,

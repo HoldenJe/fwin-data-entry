@@ -12,13 +12,23 @@ from PySide6.QtWidgets import (
 from fwin_data_entry.database.initialize import (
     initialize_database,
 )
+from fwin_data_entry.gui.catch_summary_dialog import (
+    CatchSummaryDialog,
+)
 from fwin_data_entry.gui.effort_dialog import (
     EffortDialog,
 )
 from fwin_data_entry.gui.project_dialog import (
     ProjectDialog,
 )
+from fwin_data_entry.models.catch_summary import (
+    CatchSummary,
+)
+from fwin_data_entry.models.effort import Effort
 from fwin_data_entry.models.project import Project
+from fwin_data_entry.services.catch_summary_service import (
+    create_catch_summary,
+)
 from fwin_data_entry.services.effort_service import (
     create_effort,
     get_next_sam,
@@ -28,7 +38,6 @@ from fwin_data_entry.services.project_service import (
     get_first_project,
 )
 
-from fwin_data_entry.models.effort import Effort
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -72,6 +81,14 @@ class MainWindow(QMainWindow):
         new_effort_action = file_menu.addAction(
                 "New Effort"
             )
+        
+        new_catch_action = file_menu.addAction(
+            "New Catch Summary"
+        )
+
+        new_catch_action.triggered.connect(
+            self.new_catch_summary
+        )
 
         new_effort_action.triggered.connect(
                 self.new_effort
@@ -153,8 +170,6 @@ class MainWindow(QMainWindow):
                 f"Waterbody: {project.wby_nm}"
             )
 
-    
-
     def new_effort(self):
         """Open effort dialog."""
 
@@ -209,4 +224,45 @@ class MainWindow(QMainWindow):
             self,
             "Success",
             f"Saved SAM {effort.sam}",
+        )
+
+    def new_catch_summary(self):
+        """Create FN123 record."""
+
+        if self.current_project is None:
+            QMessageBox.warning(
+                self,
+                "No Project",
+                "Open a project first.",
+            )
+            return
+
+        dialog = CatchSummaryDialog()
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        record = CatchSummary(
+            prj_cd=self.current_project.prj_cd,
+            sam=int(data["sam"]),
+            eff=int(data["eff"]),
+            spc=int(data["spc"]),
+            catcnt=int(data["catcnt"]),
+            biocnt=int(data["biocnt"]),
+        )
+
+        create_catch_summary(
+            self.current_database,
+            record,
+        )
+
+        QMessageBox.information(
+            self,
+            "Success",
+            (
+                f"Saved catch summary "
+                f"for SPC {record.spc}"
+            ),
         )
