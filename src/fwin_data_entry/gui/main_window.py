@@ -280,7 +280,7 @@ class MainWindow(QMainWindow):
         )
 
     def new_catch_summary(self):
-        """Create FN123 record."""
+        """Create FN123 records."""
 
         if self.current_project is None:
             QMessageBox.warning(
@@ -294,35 +294,43 @@ class MainWindow(QMainWindow):
             sam=self.current_sam,
         )
 
-        if not dialog.exec():
-            return
+        while True:
 
-        data = dialog.get_data()
+            if not dialog.exec():
+                return
 
-        record = CatchSummary(
-            prj_cd=self.current_project.prj_cd,
-            sam=int(data["sam"]),
-            eff=int(data["eff"]),
-            spc=int(data["spc"]),
-            catcnt=int(data["catcnt"]),
-            biocnt=int(data["biocnt"]),
-        )
+            data = dialog.get_data()
 
-        create_catch_summary(
-            self.current_database,
-            record,
-        )
-        
-        self.refresh_workspace()
-        
-        QMessageBox.information(
-            self,
-            "Success",
-            (
-                f"Saved catch summary "
-                f"for SPC {record.spc}"
-            ),
-        )
+            record = CatchSummary(
+                prj_cd=self.current_project.prj_cd,
+                sam=int(data["sam"]),
+                eff=int(data["eff"]),
+                spc=int(data["spc"]),
+                catcnt=int(data["catcnt"]),
+                biocnt=int(data["biocnt"]),
+            )
+
+            create_catch_summary(
+                self.current_database,
+                record,
+            )
+
+            self.refresh_workspace()
+
+            if dialog.result_action == "close":
+
+                QMessageBox.information(
+                    self,
+                    "Success",
+                    (
+                        f"Saved catch summary "
+                        f"for SPC {record.spc}"
+                    ),
+                )
+
+                return
+
+            dialog.clear_species_fields()
     
     def new_fish_sample(self):
         """Create FN125 record."""
