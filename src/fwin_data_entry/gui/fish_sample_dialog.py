@@ -165,3 +165,51 @@ class FishSampleDialog(QDialog):
         self.tissue.clear()
 
         self.flen.setFocus()
+
+    def load_fish(self, fish_sample):
+        """Populate dialog with existing data."""
+
+        self.sam.setText(str(fish_sample.sam))
+        self.spc.setText(str(fish_sample.spc))
+        self.fish.setText(str(fish_sample.fish))
+
+        self.flen.setText(
+            "" if fish_sample.flen is None
+            else str(fish_sample.flen)
+        )
+
+        self.tlen.setText(
+            "" if fish_sample.tlen is None
+            else str(fish_sample.tlen)
+        )
+
+        self.rwt.setText(
+            "" if fish_sample.rwt is None
+            else str(fish_sample.rwt)
+        )
+
+        self.sex.setText(
+            "" if fish_sample.sex is None
+            else str(fish_sample.sex)
+        )
+
+        self.mat.setText(
+            "" if fish_sample.mat is None
+            else str(fish_sample.mat)
+        )
+
+        self.agest.setText(fish_sample.agest)
+        self.stom.setText(fish_sample.stom)
+        self.taxon.setText(fish_sample.taxon)
+
+        self.gonwt.setText(
+            "" if fish_sample.gonwt is None
+            else str(fish_sample.gonwt)
+        )
+
+        self.eviswt.setText(
+            "" if fish_sample.eviswt is None
+            else str(fish_sample.eviswt)
+        )
+
+        self.tissue.setText(fish_sample.tissue)
