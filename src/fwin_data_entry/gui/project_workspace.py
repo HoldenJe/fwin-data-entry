@@ -64,9 +64,18 @@ class ProjectWorkspace(QWidget):
         self.sample_details = QLabel(
             "No sample selected"
         )
-        self.catch_summary_label = QLabel(
-            "No catch summaries"
+        self.catch_table = QTableWidget()
+
+        self.catch_table.setColumnCount(3)
+
+        self.catch_table.setHorizontalHeaderLabels(
+            [
+                "SPC",
+                "CATCNT",
+                "BIOCNT",
+            ]
         )
+
         self.fish_table = QTableWidget()
 
         self.fish_table.setColumnCount(5)
@@ -112,7 +121,7 @@ class ProjectWorkspace(QWidget):
         )
 
         right_layout.addWidget(
-            self.catch_summary_label
+            self.catch_table
         )
 
         right_layout.addWidget(

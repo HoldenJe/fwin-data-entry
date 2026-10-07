@@ -517,22 +517,32 @@ class MainWindow(QMainWindow):
             sam,
         )
 
-        if summaries:
-            text = "FN123\n------\n"
+        self.workspace.catch_table.setRowCount(
+            len(summaries)
+        )
 
-            for spc, catcnt, biocnt in summaries:
-                text += (
-                    f"SPC {spc}"
-                    f"  CATCNT={catcnt}"
-                    f"  BIOCNT={biocnt}\n"
-                )
+        for row, (
+            spc,
+            catcnt,
+            biocnt,
+        ) in enumerate(summaries):
 
-            self.workspace.catch_summary_label.setText(
-                text
+            self.workspace.catch_table.setItem(
+                row,
+                0,
+                QTableWidgetItem(str(spc)),
             )
-        else:
-            self.workspace.catch_summary_label.setText(
-                "No catch summaries"
+
+            self.workspace.catch_table.setItem(
+                row,
+                1,
+                QTableWidgetItem(str(catcnt)),
+            )
+
+            self.workspace.catch_table.setItem(
+                row,
+                2,
+                QTableWidgetItem(str(biocnt)),
             )
 
         fish_records = get_sample_fish(
