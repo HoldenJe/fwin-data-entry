@@ -20,7 +20,9 @@ class ProjectWorkspace(QWidget):
         )
 
         self.sam_list = QListWidget()
-
+        self.add_sam_button = QPushButton(
+            "Add SAM"
+        )
         self.sample_details = QLabel(
             "No sample selected"
         )
@@ -40,6 +42,7 @@ class ProjectWorkspace(QWidget):
         left_layout = QVBoxLayout()
         left_layout.addWidget(QLabel("Samples"))
         left_layout.addWidget(self.sam_list)
+        left_layout.addWidget(self.add_sam_button)
 
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.project_label)

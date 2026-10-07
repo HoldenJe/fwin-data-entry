@@ -82,6 +82,9 @@ class MainWindow(QMainWindow):
         self.workspace.add_fish_button.clicked.connect(
             self.new_fish_sample
         )
+        self.workspace.add_sam_button.clicked.connect(
+            self.new_effort
+        )
         self._create_menu()
         
         
@@ -266,8 +269,10 @@ class MainWindow(QMainWindow):
             effort,
         )
 
-        self.refresh_workspace()
+        self.current_sam = effort.sam
         
+        self.refresh_workspace()
+
         QMessageBox.information(
             self,
             "Success",
