@@ -87,6 +87,14 @@ class MainWindow(QMainWindow):
             self.new_effort
         )
         self._create_menu()
+
+        self.workspace.catch_table.itemSelectionChanged.connect(
+           self.catch_selection_changed
+        )
+
+        self.workspace.fish_table.itemSelectionChanged.connect(
+            self.fish_selection_changed
+        )
         
         
     def _create_menu(self):
@@ -591,5 +599,37 @@ class MainWindow(QMainWindow):
                 4,
                 QTableWidgetItem(str(rwt)),
             )    
+    
+    def catch_selection_changed(self):
+        """Enable FN123 actions."""
 
+        enabled = (
+            self.workspace.catch_table.currentRow()
+            >= 0
+        )
+
+        self.workspace.edit_catch_button.setEnabled(
+            enabled
+        )
+
+        self.workspace.delete_catch_button.setEnabled(
+            enabled
+        )
+
+
+    def fish_selection_changed(self):
+        """Enable FN125 actions."""
+
+        enabled = (
+            self.workspace.fish_table.currentRow()
+            >= 0
+        )
+
+        self.workspace.edit_fish_button.setEnabled(
+            enabled
+        )
+
+        self.workspace.delete_fish_button.setEnabled(
+            enabled
+        )
     

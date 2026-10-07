@@ -75,7 +75,13 @@ class ProjectWorkspace(QWidget):
                 "BIOCNT",
             ]
         )
+        self.edit_catch_button = QPushButton(
+            "Edit Catch Summary"
+        )
 
+        self.delete_catch_button = QPushButton(
+            "Delete Catch Summary"
+        )
         self.fish_table = QTableWidget()
 
         self.fish_table.setColumnCount(5)
@@ -89,7 +95,13 @@ class ProjectWorkspace(QWidget):
                 "RWT",
             ]
         )
+        self.edit_fish_button = QPushButton(
+            "Edit Fish"
+        )
 
+        self.delete_fish_button = QPushButton(
+            "Delete Fish"
+        )
         self.add_catch_button = QPushButton(
             "Add Catch Summary"
         )
@@ -123,7 +135,13 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(
             self.catch_table
         )
+        right_layout.addWidget(
+            self.edit_catch_button
+        )
 
+        right_layout.addWidget(
+            self.delete_catch_button
+        )
         right_layout.addWidget(
             self.fish_heading
         )
@@ -131,7 +149,13 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(
             self.fish_table
         )
+        right_layout.addWidget(
+            self.edit_fish_button
+        )
 
+        right_layout.addWidget(
+            self.delete_fish_button
+        )
         right_layout.addWidget(
             self.add_catch_button
         )
@@ -146,6 +170,12 @@ class ProjectWorkspace(QWidget):
         layout.addLayout(right_layout, 3)
 
         self.setLayout(layout)
+
+        self.edit_catch_button.setEnabled(False)
+        self.delete_catch_button.setEnabled(False)
+
+        self.edit_fish_button.setEnabled(False)
+        self.delete_fish_button.setEnabled(False)
 
     def set_sample_details(
         self,
