@@ -402,6 +402,20 @@ class MainWindow(QMainWindow):
     def refresh_workspace(self):
         """Refresh workspace display."""
 
+        if self.current_database is None:
+            return
+
+        # Refresh SAM list
+        self.workspace.sam_list.clear()
+
+        for sam in get_project_samples(
+            self.current_database
+        ):
+            self.workspace.sam_list.addItem(
+                f"SAM {sam}"
+            )
+
+        # Refresh selected SAM
         if self.current_sam is None:
             return
 
@@ -421,6 +435,10 @@ class MainWindow(QMainWindow):
             )
 
             if sam == self.current_sam:
+
+                self.workspace.sam_list.setCurrentItem(
+                    item
+                )
 
                 self.select_sample(item)
 
