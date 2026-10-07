@@ -203,10 +203,13 @@ class MainWindow(QMainWindow):
         self.current_database = filename
 
         self.workspace.project_label.setText(
-                f"Project: {project.prj_cd}\n"
-                f"Name: {project.prj_nm}\n"
-                f"Waterbody: {project.wby_nm}"           
+ 
+                f"{project.prj_cd}\n"
+                f"{project.prj_nm}\n"
+                f"{project.wby_nm}"
+ 
         )
+
 
         self.workspace.sam_list.clear()
 
