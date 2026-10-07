@@ -17,7 +17,7 @@ class CatchSummaryDialog(QDialog):
         sam: int | None = None,
         ):
         super().__init__()
-
+        self.result_action = None
         self.setWindowTitle(
             "New Catch Summary"
         )
@@ -40,17 +40,44 @@ class CatchSummaryDialog(QDialog):
         form.addRow("Catch Count", self.catcnt)
         form.addRow("Bio Count", self.biocnt)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(self.accept)
+        self.save_add_button = QPushButton(
+            "Save & Add Another Species"
+        )
 
-        cancel_button = QPushButton("Cancel")
-        cancel_button.clicked.connect(self.reject)
+        self.save_close_button = QPushButton(
+            "Save & Close"
+        )
 
+        cancel_button = QPushButton(
+            "Cancel"
+        )
+
+        cancel_button.clicked.connect(
+            self.reject
+        )
+        self.save_add_button.clicked.connect(
+            self.save_add
+        )
+
+        self.save_close_button.clicked.connect(
+            self.save_close
+        )
+        
         layout = QVBoxLayout()
 
         layout.addLayout(form)
-        layout.addWidget(ok_button)
-        layout.addWidget(cancel_button)
+        
+        layout.addWidget(
+            self.save_add_button
+        )
+
+        layout.addWidget(
+            self.save_close_button
+        )
+
+        layout.addWidget(
+            cancel_button
+        )
 
         self.setLayout(layout)
 
@@ -64,3 +91,27 @@ class CatchSummaryDialog(QDialog):
             "catcnt": self.catcnt.text(),
             "biocnt": self.biocnt.text(),
         }
+
+    def clear_species_fields(self):
+        """Clear species entry fields."""
+
+        self.spc.clear()
+        self.catcnt.clear()
+        self.biocnt.clear()
+
+        self.spc.setFocus()
+
+    def save_add(self):
+        """Save and continue."""
+
+        self.result_action = "add"
+
+        self.accept()
+
+
+    def save_close(self):
+        """Save and close."""
+
+        self.result_action = "close"
+
+        self.accept()
