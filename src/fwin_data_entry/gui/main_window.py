@@ -333,7 +333,7 @@ class MainWindow(QMainWindow):
             dialog.clear_species_fields()
     
     def new_fish_sample(self):
-        """Create FN125 record."""
+        """Create FN125 records."""
 
         if self.current_project is None:
             QMessageBox.warning(
@@ -343,70 +343,92 @@ class MainWindow(QMainWindow):
             )
             return
 
-        dialog = FishSampleDialog()
-
-        if not dialog.exec():
-            return
-
-        data = dialog.get_data()
-
-        next_fish = get_next_fish(
-            self.current_database,
-            self.current_project.prj_cd,
-            int(data["sam"]),
-            999,
-            int(data["spc"]),
+        dialog = FishSampleDialog(
+            sam=self.current_sam,
         )
 
-        record = FishSample(
-            prj_cd=self.current_project.prj_cd,
-            sam=int(data["sam"]),
-            eff=999,
-            spc=int(data["spc"]),
-            fish=next_fish,
-            flen=float(data["flen"])
-            if data["flen"]
-            else None,
-            tlen=float(data["tlen"])
-            if data["tlen"]
-            else None,
-            rwt=float(data["rwt"])
-            if data["rwt"]
-            else None,
-            sex=int(data["sex"])
-            if data["sex"]
-            else None,
-            mat=int(data["mat"])
-            if data["mat"]
-            else None,
-            agest=data["agest"],
-            stom=data["stom"],
-            taxon=data["taxon"],
-            gonwt=float(data["gonwt"])
-            if data["gonwt"]
-            else None,
-            eviswt=float(data["eviswt"])
-            if data["eviswt"]
-            else None,
-            tissue=data["tissue"],
-        )
+        while True:
 
-        create_fish_sample(
-            self.current_database,
-            record,
-        )
-        
-        self.refresh_workspace()
-        
-        QMessageBox.information(
-            self,
-            "Success",
-            (
-                f"Saved fish {record.fish} "
-                f"for SPC {record.spc}"
-            ),
-        )
+            if not dialog.exec():
+                return
 
+            data = dialog.get_data()
+
+            next_fish = get_next_fish(
+                self.current_database,
+                self.current_project.prj_cd,
+                int(data["sam"]),
+                999,
+                int(data["spc"]),
+            )
+
+            record = FishSample(
+                prj_cd=self.current_project.prj_cd,
+                sam=int(data["sam"]),
+                eff=999,
+                spc=int(data["spc"]),
+                fish=next_fish,
+                flen=float(data["flen"])
+                if data["flen"]
+                else None,
+                tlen=float(data["tlen"])
+                if data["tlen"]
+                else None,
+                rwt=float(data["rwt"])
+                if data["rwt"]
+                else None,
+                sex=int(data["sex"])
+                if data["sex"]
+                else None,
+                mat=int(data["mat"])
+                if data["mat"]
+                else None,
+                agest=data["agest"],
+                stom=data["stom"],
+                taxon=data["taxon"],
+                gonwt=float(data["gonwt"])
+                if data["gonwt"]
+                else None,
+                eviswt=float(data["eviswt"])
+                if data["eviswt"]
+                else None,
+                tissue=data["tissue"],
+            )
+
+            create_fish_sample(
+                self.current_database,
+                record,
+            )
+
+            self.refresh_workspace()
+
+            if dialog.result_action == "close":
+
+                QMessageBox.information(
+                    self,
+                    "Success",
+                    (
+                        f"Saved fish {record.fish} "
+                        f"for SPC {record.spc}"
+                    ),
+                )
+
+                return
+
+            next_fish = get_next_fish(
+                self.current_database,
+                self.current_project.prj_cd,
+                record.sam,
+                record.eff,
+                record.spc,
+            )
+
+            dialog.fish.setText(
+                str(next_fish)
+            )
+
+            dialog.clear_fish_fields()
+            
     def refresh_workspace(self):
         """Refresh workspace display."""
 
