@@ -76,6 +76,7 @@ class MainWindow(QMainWindow):
         self.current_project = None
         self.current_database = None
         self.current_sam = None
+        self.selected_fish = None
         self.workspace.add_catch_button.clicked.connect(
             self.new_catch_summary
         )
@@ -94,6 +95,10 @@ class MainWindow(QMainWindow):
 
         self.workspace.fish_table.itemSelectionChanged.connect(
             self.fish_selection_changed
+        )
+
+        self.workspace.edit_fish_button.clicked.connect(
+           self.edit_fish
         )
         
         
@@ -620,10 +625,11 @@ class MainWindow(QMainWindow):
     def fish_selection_changed(self):
         """Enable FN125 actions."""
 
-        enabled = (
+        row = (
             self.workspace.fish_table.currentRow()
-            >= 0
         )
+
+        enabled = row >= 0
 
         self.workspace.edit_fish_button.setEnabled(
             enabled
@@ -632,4 +638,32 @@ class MainWindow(QMainWindow):
         self.workspace.delete_fish_button.setEnabled(
             enabled
         )
-    
+
+        if enabled:
+
+            fish = int(
+                self.workspace.fish_table.item(
+                    row,
+                    0,
+                ).text()
+            )
+
+            spc = int(
+                self.workspace.fish_table.item(
+                    row,
+                    1,
+                ).text()
+            )
+
+            self.selected_fish = (
+                fish,
+                spc,
+            )
+        else:
+
+            self.selected_fish = None
+
+    def edit_fish(self):
+        """Edit selected fish."""
+
+        print(self.selected_fish)
