@@ -69,8 +69,9 @@ def get_sample_fish(
         cursor = conn.execute(
             """
             SELECT
-                FISH,
                 SPC,
+                FISH,
+                FLEN,
                 TLEN,
                 RWT
             FROM FN125

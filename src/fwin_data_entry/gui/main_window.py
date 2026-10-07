@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QMainWindow,
     QMessageBox,
+    QTableWidgetItem,
 )
 
 from fwin_data_entry.database.initialize import (
@@ -536,27 +537,46 @@ class MainWindow(QMainWindow):
             sam,
         )
 
-        if fish_records:
+        self.workspace.fish_table.setRowCount(
+            len(fish_records)
+        )
 
-            text = "FN125\n------\n\n"
+        for row, (
+            fish,
+            spc,
+            flen,
+            tlen,
+            rwt,
+        ) in enumerate(fish_records):
 
-            for fish, spc, tlen, rwt in fish_records:
-
-                text += (
-                    f"Fish {fish}"
-                    f"  SPC={spc}"
-                    f"  TLEN={tlen}"
-                    f"  RWT={rwt}\n"
-                )
-
-            self.workspace.fish_label.setText(
-                text
+            self.workspace.fish_table.setItem(
+                row,
+                0,
+                QTableWidgetItem(str(fish)),
             )
 
-        else:
-
-            self.workspace.fish_label.setText(
-                "No fish samples"
+            self.workspace.fish_table.setItem(
+                row,
+                1,
+                QTableWidgetItem(str(spc)),
             )
+
+            self.workspace.fish_table.setItem(
+                row,
+                2,
+                QTableWidgetItem(str(flen)),
+            )
+
+            self.workspace.fish_table.setItem(
+                row,
+                3,
+                QTableWidgetItem(str(tlen)),
+            )
+
+            self.workspace.fish_table.setItem(
+                row,
+                4,
+                QTableWidgetItem(str(rwt)),
+            )    
 
     

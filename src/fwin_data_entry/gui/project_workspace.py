@@ -7,7 +7,9 @@ from PySide6.QtWidgets import (
     QListWidget,
     QVBoxLayout,
     QWidget,
-)
+    QTableWidget,
+    QTableWidgetItem,
+    )
 
 class ProjectWorkspace(QWidget):
     """Project workspace."""
@@ -29,9 +31,20 @@ class ProjectWorkspace(QWidget):
         self.catch_summary_label = QLabel(
             "No catch summaries"
         )
-        self.fish_label = QLabel(
-            "No fish samples"
+        self.fish_table = QTableWidget()
+
+        self.fish_table.setColumnCount(5)
+
+        self.fish_table.setHorizontalHeaderLabels(
+            [
+                "FISH",
+                "SPC",
+                "FLEN",
+                "TLEN",
+                "RWT",
+            ]
         )
+
         self.add_catch_button = QPushButton(
             "Add Catch Summary"
         )
@@ -48,7 +61,7 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(self.project_label)
         right_layout.addWidget(self.sample_details)
         right_layout.addWidget(self.catch_summary_label)
-        right_layout.addWidget(self.fish_label)
+        right_layout.addWidget(self.fish_table)
         right_layout.addWidget(
             self.add_catch_button
         )
