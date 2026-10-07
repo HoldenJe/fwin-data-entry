@@ -74,9 +74,17 @@ class MainWindow(QMainWindow):
 
         self.current_project = None
         self.current_database = None
+        self.current_sam = None
+        self.workspace.add_catch_button.clicked.connect(
+            self.new_catch_summary
+        )
 
+        self.workspace.add_fish_button.clicked.connect(
+            self.new_fish_sample
+        )
         self._create_menu()
-
+        
+        
     def _create_menu(self):
         """Create application menus."""
 
@@ -258,6 +266,8 @@ class MainWindow(QMainWindow):
             effort,
         )
 
+        self.refresh_workspace()
+        
         QMessageBox.information(
             self,
             "Success",
@@ -275,7 +285,9 @@ class MainWindow(QMainWindow):
             )
             return
 
-        dialog = CatchSummaryDialog()
+        dialog = CatchSummaryDialog(
+            sam=self.current_sam,
+        )
 
         if not dialog.exec():
             return
@@ -295,7 +307,9 @@ class MainWindow(QMainWindow):
             self.current_database,
             record,
         )
-
+        
+        self.refresh_workspace()
+        
         QMessageBox.information(
             self,
             "Success",
@@ -368,7 +382,9 @@ class MainWindow(QMainWindow):
             self.current_database,
             record,
         )
-
+        
+        self.refresh_workspace()
+        
         QMessageBox.information(
             self,
             "Success",
@@ -377,6 +393,34 @@ class MainWindow(QMainWindow):
                 f"for SPC {record.spc}"
             ),
         )
+
+    def refresh_workspace(self):
+        """Refresh workspace display."""
+
+        if self.current_sam is None:
+            return
+
+        for index in range(
+            self.workspace.sam_list.count()
+        ):
+
+            item = self.workspace.sam_list.item(
+                index
+            )
+
+            sam = int(
+                item.text().replace(
+                    "SAM ",
+                    "",
+                )
+            )
+
+            if sam == self.current_sam:
+
+                self.select_sample(item)
+
+                break
+
 
     def select_sample(self, item):
         """Display sample information."""
@@ -387,6 +431,8 @@ class MainWindow(QMainWindow):
                 "",
             )
         )
+
+        self.current_sam = sam
 
         effort = get_sample_details(
             self.current_database,
@@ -459,3 +505,5 @@ class MainWindow(QMainWindow):
             self.workspace.fish_label.setText(
                 "No fish samples"
             )
+
+    

@@ -12,7 +12,10 @@ from PySide6.QtWidgets import (
 class CatchSummaryDialog(QDialog):
     """FN123 entry dialog."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        sam: int | None = None,
+        ):
         super().__init__()
 
         self.setWindowTitle(
@@ -20,6 +23,8 @@ class CatchSummaryDialog(QDialog):
         )
 
         self.sam = QLineEdit()
+        if sam is not None:
+            self.sam.setText(str(sam))
         self.eff = QLineEdit("999")
 
         self.spc = QLineEdit()
