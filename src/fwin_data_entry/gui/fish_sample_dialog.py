@@ -18,7 +18,7 @@ class FishSampleDialog(QDialog):
         fish: int | None = None,
     ):
         super().__init__()
-
+        self.result_action = None
         self.setWindowTitle(
             "New Fish Sample"
         )
@@ -68,17 +68,44 @@ class FishSampleDialog(QDialog):
 
         form.addRow("TISSUE", self.tissue)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(self.accept)
+        self.save_add_button = QPushButton(
+            "Save & Add Another Fish"
+        )
 
-        cancel_button = QPushButton("Cancel")
-        cancel_button.clicked.connect(self.reject)
+        self.save_close_button = QPushButton(
+            "Save & Close"
+        )
 
+        cancel_button = QPushButton(
+            "Cancel"
+        )
+
+        cancel_button.clicked.connect(
+            self.reject
+        )
+        
+        self.save_add_button.clicked.connect(
+            self.save_add
+        )
+
+        self.save_close_button.clicked.connect(
+            self.save_close
+        )
+        
         layout = QVBoxLayout()
 
         layout.addLayout(form)
-        layout.addWidget(ok_button)
-        layout.addWidget(cancel_button)
+        layout.addWidget(
+            self.save_add_button
+        )
+
+        layout.addWidget(
+            self.save_close_button
+        )
+
+        layout.addWidget(
+            cancel_button
+        )
 
         self.setLayout(layout)
 
@@ -101,3 +128,40 @@ class FishSampleDialog(QDialog):
             "eviswt": self.eviswt.text(),
             "tissue": self.tissue.text(),
         }
+
+    def save_add(self):
+        """Save and continue."""
+
+        self.result_action = "add"
+
+        self.accept()
+
+
+    def save_close(self):
+        """Save and close."""
+
+        self.result_action = "close"
+
+        self.accept()
+
+    def clear_fish_fields(self):
+        """Prepare for next fish."""
+
+        self.flen.clear()
+        self.tlen.clear()
+        self.rwt.clear()
+
+        self.sex.clear()
+        self.mat.clear()
+
+        self.agest.clear()
+        self.stom.clear()
+
+        self.taxon.clear()
+
+        self.gonwt.clear()
+        self.eviswt.clear()
+
+        self.tissue.clear()
+
+        self.flen.setFocus()
