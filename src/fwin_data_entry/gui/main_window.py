@@ -585,15 +585,15 @@ class MainWindow(QMainWindow):
             return
 
         self.workspace.set_sample_details(
-            
-                f"Sample: {effort.sam}\n\n"
-                f"GR: {effort.gr}\n"
-                f"Area: {effort.area}\n"
-                f"Set Date: {effort.effdt0}\n"
-                f"Set Time: {effort.efftm0}\n"
-                f"Secchi: {effort.secchi}\n"
-                f"Crew: {effort.crew}"
-            
+        
+            f"SAM: {effort.sam}    "
+            f"GR: {effort.gr}    "
+            f"Area: {effort.area}\n\n"
+            f"Date: {effort.effdt0}    "
+            f"Time: {effort.efftm0}\n\n"
+            f"Secchi: "
+            f"{'' if effort.secchi is None else effort.secchi}    "
+            f"Crew: {effort.crew}"
         )
 
         summaries = get_sample_catch_summaries(
