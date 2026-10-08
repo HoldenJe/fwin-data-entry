@@ -296,10 +296,22 @@ class MainWindow(QMainWindow):
             comment=data["comment"],
         )
 
-        create_effort(
-            self.current_database,
-            effort,
-        )
+        try:
+
+            create_effort(
+                self.current_database,
+                effort,
+            )
+
+        except ValueError as e:
+
+            QMessageBox.warning(
+                self,
+                "Validation Error",
+                str(e),
+            )
+
+            return
 
         self.current_sam = effort.sam
         
@@ -876,7 +888,7 @@ class MainWindow(QMainWindow):
         if effort is None:
             return
 
-        dialog = EffortDialog()
+        dialog = EffortDialog(edit_mode=True)
 
         dialog.load_effort(
             effort
