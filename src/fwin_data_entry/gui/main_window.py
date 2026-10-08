@@ -63,6 +63,7 @@ from fwin_data_entry.services.workspace_service import (
     get_sample_details,
     get_sample_fish,
     catch_summary_exists,
+    sample_exists,
 )
 
 
@@ -331,6 +332,23 @@ class MainWindow(QMainWindow):
 
             data = dialog.get_data()
 
+            if not sample_exists(
+                self.current_database,
+                int(data["sam"]),
+            ):
+
+                QMessageBox.warning(
+                    self,
+                    "Missing Sample",
+                    (
+                        "Create an FN121 sample "
+                        "before entering catch "
+                        "summaries."
+                    ),
+                )
+
+                continue
+
             record = CatchSummary(
                 prj_cd=self.current_project.prj_cd,
                 sam=int(data["sam"]),
@@ -400,7 +418,7 @@ class MainWindow(QMainWindow):
                 )
 
                 continue
-            
+
             next_fish = get_next_fish(
                 self.current_database,
                 self.current_project.prj_cd,
