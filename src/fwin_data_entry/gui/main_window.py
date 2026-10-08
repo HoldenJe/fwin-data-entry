@@ -781,7 +781,7 @@ class MainWindow(QMainWindow):
         if catch_summary is None:
             return
 
-        dialog = CatchSummaryDialog()
+        dialog = CatchSummaryDialog(edit_mode=True)
 
         dialog.load_catch_summary(
             catch_summary

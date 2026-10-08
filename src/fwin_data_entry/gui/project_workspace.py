@@ -148,6 +148,9 @@ class ProjectWorkspace(QWidget):
             self.delete_catch_button
         )
         right_layout.addWidget(
+            self.add_catch_button
+        )
+        right_layout.addWidget(
             self.fish_heading
         )
 
@@ -161,10 +164,7 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(
             self.delete_fish_button
         )
-        right_layout.addWidget(
-            self.add_catch_button
-        )
-
+        
         right_layout.addWidget(
             self.add_fish_button
         )
