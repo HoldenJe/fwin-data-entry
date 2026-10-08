@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
         )
 
     def new_effort(self):
-        """Open effort dialog."""
+        """Create FN121 records."""
 
         if self.current_project is None:
             QMessageBox.warning(
@@ -271,57 +271,74 @@ class MainWindow(QMainWindow):
             sam=next_sam,
         )
 
-        if not dialog.exec():
-            return
+        while True:
 
-        data = dialog.get_data()
+            if not dialog.exec():
+                return
 
-        effort = Effort(
-            prj_cd=self.current_project.prj_cd,
-            sam=int(data["sam"]),
-            gr=data["gr"],
-            area=data["area"],
-            effdt0=data["effdt0"],
-            efftm0=data["efftm0"],
-            dd_lat0=float(data["dd_lat0"])
-            if data["dd_lat0"]
-            else None,
-            dd_lon0=float(data["dd_lon0"])
-            if data["dd_lon0"]
-            else None,
-            secchi=float(data["secchi"])
-            if data["secchi"]
-            else None,
-            crew=data["crew"],
-            comment=data["comment"],
-        )
+            data = dialog.get_data()
 
-        try:
+            effort = Effort(
+                prj_cd=self.current_project.prj_cd,
+                sam=int(data["sam"]),
+                gr=data["gr"],
+                area=data["area"],
+                effdt0=data["effdt0"],
+                efftm0=data["efftm0"],
+                dd_lat0=float(data["dd_lat0"])
+                if data["dd_lat0"]
+                else None,
+                dd_lon0=float(data["dd_lon0"])
+                if data["dd_lon0"]
+                else None,
+                secchi=float(data["secchi"])
+                if data["secchi"]
+                else None,
+                crew=data["crew"],
+                comment=data["comment"],
+            )
 
-            create_effort(
+            try:
+
+                create_effort(
+                    self.current_database,
+                    effort,
+                )
+
+            except ValueError as e:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    str(e),
+                )
+
+                continue
+
+            self.current_sam = effort.sam
+
+            self.refresh_workspace()
+
+            if dialog.result_action == "close":
+
+                QMessageBox.information(
+                    self,
+                    "Success",
+                    f"Saved SAM {effort.sam}",
+                )
+
+                return
+
+            next_sam = get_next_sam(
                 self.current_database,
-                effort,
+                self.current_project.prj_cd,
             )
 
-        except ValueError as e:
-
-            QMessageBox.warning(
-                self,
-                "Validation Error",
-                str(e),
+            dialog.sam.setText(
+                str(next_sam)
             )
 
-            return
-
-        self.current_sam = effort.sam
-        
-        self.refresh_workspace()
-
-        QMessageBox.information(
-            self,
-            "Success",
-            f"Saved SAM {effort.sam}",
-        )
+            dialog.clear_sam_fields()
 
     def new_catch_summary(self):
         """Create FN123 records."""
