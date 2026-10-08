@@ -126,3 +126,28 @@ def sample_exists(
         )
 
         return cursor.fetchone()[0] > 0
+
+def catch_summary_record_exists(
+    db_path: str,
+    sam: int,
+    spc: int,
+) -> bool:
+    """Return True if FN123 record already exists."""
+
+    with get_connection(db_path) as conn:
+
+        cursor = conn.execute(
+            """
+            SELECT COUNT(*)
+            FROM FN123
+            WHERE
+                SAM = ?
+                AND SPC = ?
+            """,
+            (
+                sam,
+                spc,
+            ),
+        )
+
+        return cursor.fetchone()[0] > 0

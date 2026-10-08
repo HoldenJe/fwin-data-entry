@@ -64,6 +64,7 @@ from fwin_data_entry.services.workspace_service import (
     get_sample_fish,
     catch_summary_exists,
     sample_exists,
+    catch_summary_record_exists
 )
 
 
@@ -331,7 +332,26 @@ class MainWindow(QMainWindow):
                 return
 
             data = dialog.get_data()
+            
+            if catch_summary_record_exists(
+                self.current_database,
+                int(data["sam"]),
+                int(data["spc"]),
+            ):
 
+                QMessageBox.warning(
+                    self,
+                    "Catch Summary Exists",
+                    (
+                        "A catch summary already "
+                        "exists for this species.\n\n"
+                        "Use Edit Catch Summary "
+                        "to modify the record."
+                    ),
+                )
+
+                continue
+            
             if not sample_exists(
                 self.current_database,
                 int(data["sam"]),
