@@ -190,4 +190,7 @@ class EffortDialog(QDialog):
 
         self.comment.clear()
 
+        # GR intentionally retained
+        # Crew intentionally retained
+
         self.gr.setFocus()
