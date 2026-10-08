@@ -24,7 +24,7 @@ class ProjectWorkspace(QWidget):
         )
 
         banner_font = QFont()
-        banner_font.setPointSize(14)
+        banner_font.setPointSize(16)
         banner_font.setBold(True)
         
         self.project_label.setFont(
