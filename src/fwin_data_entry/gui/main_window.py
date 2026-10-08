@@ -206,10 +206,9 @@ class MainWindow(QMainWindow):
 
         self.workspace.project_label.setText(
  
-                f"{project.prj_cd}\n"
-                f"{project.prj_nm}\n"
+                f"PROJECT: {project.prj_cd}    "
+                f"{project.prj_nm}    "
                 f"{project.wby_nm}"
- 
         )
 
 
