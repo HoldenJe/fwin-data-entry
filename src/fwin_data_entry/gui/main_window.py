@@ -207,8 +207,6 @@ class MainWindow(QMainWindow):
 
             initialize_database(str(db_path))
 
-            
-
             try:
 
                 create_project(
@@ -225,8 +223,6 @@ class MainWindow(QMainWindow):
                 )
 
                 continue
-
-            break
 
             self.current_project = project
             self.current_database = str(db_path)
@@ -249,7 +245,8 @@ class MainWindow(QMainWindow):
                 self.workspace.sam_list.addItem(
                     f"SAM {sam}"
                 )
-            return
+            
+            break
 
 
     def open_project(self):
