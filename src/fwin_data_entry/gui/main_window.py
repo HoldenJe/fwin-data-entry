@@ -62,6 +62,7 @@ from fwin_data_entry.services.workspace_service import (
     get_sample_catch_summaries,
     get_sample_details,
     get_sample_fish,
+    catch_summary_exists,
 )
 
 
@@ -382,7 +383,24 @@ class MainWindow(QMainWindow):
                 return
 
             data = dialog.get_data()
+            if not catch_summary_exists(
+                self.current_database,
+                int(data["sam"]),
+                int(data["spc"]),
+            ):
 
+                QMessageBox.warning(
+                    self,
+                    "Missing Catch Summary",
+                    (
+                        "Create an FN123 catch summary "
+                        "for this species before "
+                        "adding fish records."
+                    ),
+                )
+
+                continue
+            
             next_fish = get_next_fish(
                 self.current_database,
                 self.current_project.prj_cd,

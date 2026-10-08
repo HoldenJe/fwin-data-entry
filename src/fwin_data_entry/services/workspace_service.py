@@ -82,3 +82,28 @@ def get_sample_fish(
         )
 
         return cursor.fetchall()
+
+def catch_summary_exists(
+    db_path: str,
+    sam: int,
+    spc: int,
+) -> bool:
+    """Return True if FN123 record exists."""
+
+    with get_connection(db_path) as conn:
+
+        cursor = conn.execute(
+            """
+            SELECT COUNT(*)
+            FROM FN123
+            WHERE
+                SAM = ?
+                AND SPC = ?
+            """,
+            (
+                sam,
+                spc,
+            ),
+        )
+
+        return cursor.fetchone()[0] > 0
