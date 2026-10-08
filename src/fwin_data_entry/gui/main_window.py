@@ -135,32 +135,6 @@ class MainWindow(QMainWindow):
         )
         file_menu.addSeparator()
 
-        new_effort_action = file_menu.addAction(
-                "New Effort"
-            )
-        
-        new_catch_action = file_menu.addAction(
-            "New Catch Summary"
-        )
-
-        new_catch_action.triggered.connect(
-            self.new_catch_summary
-        )
-
-        new_effort_action.triggered.connect(
-                self.new_effort
-            )
-
-        new_fish_action = file_menu.addAction(
-            "New Fish Sample"
-        )
-
-        new_fish_action.triggered.connect(
-            self.new_fish_sample
-        )
-
-        file_menu.addSeparator()
-
         exit_action = file_menu.addAction("Exit")
         exit_action.triggered.connect(self.close)
 
