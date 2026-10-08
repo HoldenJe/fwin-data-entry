@@ -38,6 +38,8 @@ from fwin_data_entry.models.fish_sample import (
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.catch_summary_service import (
     create_catch_summary,
+    get_catch_summary,
+    update_catch_summary,
 )
 from fwin_data_entry.services.effort_service import (
     create_effort,
@@ -78,6 +80,7 @@ class MainWindow(QMainWindow):
         self.current_project = None
         self.current_database = None
         self.current_sam = None
+        self.selected_catch = None
         self.selected_fish = None
         self.workspace.add_catch_button.clicked.connect(
             self.new_catch_summary
@@ -101,6 +104,9 @@ class MainWindow(QMainWindow):
 
         self.workspace.edit_fish_button.clicked.connect(
            self.edit_fish
+        )
+        self.workspace.edit_catch_button.clicked.connect(
+            self.edit_catch_summary
         )
         
         
@@ -610,10 +616,11 @@ class MainWindow(QMainWindow):
     def catch_selection_changed(self):
         """Enable FN123 actions."""
 
-        enabled = (
+        row = (
             self.workspace.catch_table.currentRow()
-            >= 0
         )
+
+        enabled = row >= 0
 
         self.workspace.edit_catch_button.setEnabled(
             enabled
@@ -622,6 +629,21 @@ class MainWindow(QMainWindow):
         self.workspace.delete_catch_button.setEnabled(
             enabled
         )
+
+        if enabled:
+
+            spc = int(
+                self.workspace.catch_table.item(
+                    row,
+                    0,
+                ).text()
+            )
+
+            self.selected_catch = spc
+
+        else:
+
+            self.selected_catch = None
 
 
     def fish_selection_changed(self):
@@ -732,6 +754,50 @@ class MainWindow(QMainWindow):
         update_fish_sample(
             self.current_database,
             updated_fish,
+        )
+
+        self.refresh_workspace()
+
+    def edit_catch_summary(self):
+        """Edit selected catch summary."""
+
+        if self.selected_catch is None:
+            return
+
+        catch_summary = get_catch_summary(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            self.selected_catch,
+        )
+
+        if catch_summary is None:
+            return
+
+        dialog = CatchSummaryDialog()
+
+        dialog.load_catch_summary(
+            catch_summary
+        )
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        updated_summary = CatchSummary(
+            prj_cd=catch_summary.prj_cd,
+            sam=catch_summary.sam,
+            eff=catch_summary.eff,
+            spc=catch_summary.spc,
+            catcnt=int(data["catcnt"]),
+            biocnt=int(data["biocnt"]),
+        )
+
+        update_catch_summary(
+            self.current_database,
+            updated_summary,
         )
 
         self.refresh_workspace()
