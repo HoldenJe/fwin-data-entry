@@ -78,3 +78,38 @@ class EffortDialog(QDialog):
             "crew": self.crew.text(),
             "comment": self.comment.toPlainText(),
         }
+
+    def load_effort(
+        self,
+        effort,
+    ):
+        """Populate dialog with existing values."""
+
+        self.sam.setText(str(effort.sam))
+
+        self.gr.setText(effort.gr)
+        self.area.setText(effort.area)
+
+        self.effdt0.setText(effort.effdt0)
+        self.efftm0.setText(effort.efftm0)
+
+        self.dd_lat0.setText(
+            "" if effort.dd_lat0 is None
+            else str(effort.dd_lat0)
+        )
+
+        self.dd_lon0.setText(
+            "" if effort.dd_lon0 is None
+            else str(effort.dd_lon0)
+        )
+
+        self.secchi.setText(
+            "" if effort.secchi is None
+            else str(effort.secchi)
+        )
+
+        self.crew.setText(effort.crew)
+
+        self.comment.setPlainText(
+            effort.comment
+        )

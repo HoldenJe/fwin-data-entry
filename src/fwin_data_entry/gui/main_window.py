@@ -44,6 +44,8 @@ from fwin_data_entry.services.catch_summary_service import (
 from fwin_data_entry.services.effort_service import (
     create_effort,
     get_next_sam,
+    get_effort,
+    update_effort,
 )
 from fwin_data_entry.services.fish_sample_service import (
     create_fish_sample,
@@ -108,7 +110,9 @@ class MainWindow(QMainWindow):
         self.workspace.edit_catch_button.clicked.connect(
             self.edit_catch_summary
         )
-        
+        self.workspace.edit_sample_button.clicked.connect(
+            self.edit_sample
+        )
         
     def _create_menu(self):
         """Create application menus."""
@@ -511,7 +515,7 @@ class MainWindow(QMainWindow):
         )
 
         self.current_sam = sam
-
+        self.workspace.edit_sample_button.setEnabled(True)
         effort = get_sample_details(
             self.current_database,
             self.current_project.prj_cd,
@@ -798,6 +802,57 @@ class MainWindow(QMainWindow):
         update_catch_summary(
             self.current_database,
             updated_summary,
+        )
+
+        self.refresh_workspace()
+
+    def edit_sample(self):
+        """Edit selected FN121 record."""
+
+        effort = get_effort(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+        )
+
+        if effort is None:
+            return
+
+        dialog = EffortDialog()
+
+        dialog.load_effort(
+            effort
+        )
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        updated_effort = Effort(
+            prj_cd=effort.prj_cd,
+            sam=effort.sam,
+            eff=effort.eff,
+            gr=data["gr"],
+            area=data["area"],
+            effdt0=data["effdt0"],
+            efftm0=data["efftm0"],
+            dd_lat0=float(data["dd_lat0"])
+            if data["dd_lat0"]
+            else None,
+            dd_lon0=float(data["dd_lon0"])
+            if data["dd_lon0"]
+            else None,
+            secchi=float(data["secchi"])
+            if data["secchi"]
+            else None,
+            crew=data["crew"],
+            comment=data["comment"],
+        )
+
+        update_effort(
+            self.current_database,
+            updated_effort,
         )
 
         self.refresh_workspace()

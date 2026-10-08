@@ -64,6 +64,9 @@ class ProjectWorkspace(QWidget):
         self.sample_details = QLabel(
             "No sample selected"
         )
+        self.edit_sample_button = QPushButton(
+            "Edit Sample"
+        )
         self.catch_table = QTableWidget()
 
         self.catch_table.setColumnCount(3)
@@ -127,7 +130,9 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(
             self.sample_details
         )
-
+        right_layout.addWidget(
+            self.edit_sample_button
+        )
         right_layout.addWidget(
             self.catch_heading
         )
@@ -170,7 +175,8 @@ class ProjectWorkspace(QWidget):
         layout.addLayout(right_layout, 3)
 
         self.setLayout(layout)
-
+        
+        self.edit_sample_button.setEnabled(False)
         self.edit_catch_button.setEnabled(False)
         self.delete_catch_button.setEnabled(False)
 
