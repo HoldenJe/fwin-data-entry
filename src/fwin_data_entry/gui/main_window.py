@@ -46,6 +46,8 @@ from fwin_data_entry.services.effort_service import (
 from fwin_data_entry.services.fish_sample_service import (
     create_fish_sample,
     get_next_fish,
+    get_fish_sample,
+    update_fish_sample,
 )
 from fwin_data_entry.services.project_service import (
     create_project,
@@ -666,4 +668,70 @@ class MainWindow(QMainWindow):
     def edit_fish(self):
         """Edit selected fish."""
 
-        print(self.selected_fish)
+        if self.selected_fish is None:
+            return
+
+        fish_number, spc = self.selected_fish
+
+        fish_sample = get_fish_sample(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+            fish_number,
+        )
+
+        if fish_sample is None:
+            return
+
+        dialog = FishSampleDialog()
+
+        dialog.load_fish(
+            fish_sample
+        )
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        updated_fish = FishSample(
+            prj_cd=fish_sample.prj_cd,
+            sam=fish_sample.sam,
+            eff=fish_sample.eff,
+            spc=fish_sample.spc,
+            fish=fish_sample.fish,
+            flen=float(data["flen"])
+            if data["flen"]
+            else None,
+            tlen=float(data["tlen"])
+            if data["tlen"]
+            else None,
+            rwt=float(data["rwt"])
+            if data["rwt"]
+            else None,
+            sex=int(data["sex"])
+            if data["sex"]
+            else None,
+            mat=int(data["mat"])
+            if data["mat"]
+            else None,
+            agest=data["agest"],
+            stom=data["stom"],
+            taxon=data["taxon"],
+            gonwt=float(data["gonwt"])
+            if data["gonwt"]
+            else None,
+            eviswt=float(data["eviswt"])
+            if data["eviswt"]
+            else None,
+            tissue=data["tissue"],
+        )
+
+        update_fish_sample(
+            self.current_database,
+            updated_fish,
+        )
+
+        self.refresh_workspace()

@@ -195,3 +195,59 @@ def update_fish_sample(
         )
 
         conn.commit()
+
+    def get_fish_sample(
+        db_path: str,
+        prj_cd: str,
+        sam: int,
+        eff: int,
+        spc: int,
+        fish: int,
+    ) -> FishSample | None:
+        """Return a single fish record."""
+
+        with get_connection(db_path) as conn:
+
+            cursor = conn.execute(
+                """
+                SELECT *
+                FROM FN125
+                WHERE
+                    PRJ_CD = ?
+                    AND SAM = ?
+                    AND EFF = ?
+                    AND SPC = ?
+                    AND FISH = ?
+                """,
+                (
+                    prj_cd,
+                    sam,
+                    eff,
+                    spc,
+                    fish,
+                ),
+            )
+
+            row = cursor.fetchone()
+
+        if row is None:
+            return None
+
+        return FishSample(
+            prj_cd=row[0],
+            sam=row[1],
+            eff=row[2],
+            spc=row[3],
+            fish=row[4],
+            flen=row[5],
+            tlen=row[6],
+            rwt=row[7],
+            sex=row[8],
+            mat=row[9],
+            agest=row[10],
+            stom=row[11],
+            taxon=row[12],
+            gonwt=row[13],
+            eviswt=row[14],
+            tissue=row[15],
+        )
