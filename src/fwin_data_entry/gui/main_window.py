@@ -67,6 +67,10 @@ from fwin_data_entry.services.workspace_service import (
     catch_summary_record_exists
 )
 
+from fwin_data_entry.services.validation import (
+    validate_required,
+)
+
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -144,37 +148,109 @@ class MainWindow(QMainWindow):
 
         dialog = ProjectDialog()
 
-        if not dialog.exec():
+        while True:
+
+            if not dialog.exec():
+                return
+
+            data = dialog.get_data()
+            
+            project = Project(
+                prj_cd=data["prj_cd"],
+                prj_nm=data["prj_nm"],
+                wby_nm=data["wby_nm"],
+                prj_date0=data["prj_date0"],
+                prj_date1=data["prj_date1"],
+                comment=data["comment"],
+            )
+            try:
+
+                validate_required(
+                    project.prj_cd,
+                    "PRJ_CD",
+                )
+
+                validate_required(
+                    project.prj_nm,
+                    "PRJ_NM",
+                )
+
+                validate_required(
+                    project.wby_nm,
+                    "WBY_NM",
+                )
+
+            except ValueError as e:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    str(e),
+                )
+
+                continue
+
+            if not data["db_location"]:
+
+                QMessageBox.warning(
+                    self,
+                    "Missing Location",
+                    "Select a database location.",
+                )
+
+                continue
+
+            db_path = (
+                Path(data["db_location"])
+                / f"{data['prj_cd']}.sqlite"
+            )
+
+            initialize_database(str(db_path))
+
+            
+
+            try:
+
+                create_project(
+                    str(db_path),
+                    project,
+                )
+
+            except ValueError as e:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    str(e),
+                )
+
+                continue
+
+            break
+
+            self.current_project = project
+            self.current_database = str(db_path)
+
+            self.workspace.project_label.setText(
+                (
+                    f"PROJECT: {project.prj_cd}    "
+                    f"{project.prj_nm}    "
+                    f"{project.wby_nm}"
+                )
+            )
+
+            self.current_sam = None
+
+            self.workspace.sam_list.clear()
+
+            for sam in get_project_samples(
+                self.current_database
+            ):
+                self.workspace.sam_list.addItem(
+                    f"SAM {sam}"
+                )
             return
 
-        data = dialog.get_data()
-
-        db_path = (
-            Path("data/projects")
-            / f"{data['prj_cd']}.sqlite"
-        )
-
-        initialize_database(str(db_path))
-
-        project = Project(
-            prj_cd=data["prj_cd"],
-            prj_nm=data["prj_nm"],
-            wby_nm=data["wby_nm"],
-            prj_date0=data["prj_date0"],
-            prj_date1=data["prj_date1"],
-            comment=data["comment"],
-        )
-
-        create_project(
-            str(db_path),
-            project,
-        )
-
-        QMessageBox.information(
-            self,
-            "Success",
-            f"Project created:\n{db_path}",
-        )
 
     def open_project(self):
         """Open an existing project."""
