@@ -16,8 +16,10 @@ class FishSampleDialog(QDialog):
         self,
         sam: int | None = None,
         fish: int | None = None,
+        edit_mode: bool = False,
     ):
         super().__init__()
+        self.edit_mode = edit_mode
         self.result_action = None
         self.setWindowTitle(
             "New Fish Sample"
@@ -68,13 +70,23 @@ class FishSampleDialog(QDialog):
 
         form.addRow("TISSUE", self.tissue)
 
-        self.save_add_button = QPushButton(
-            "Save & Add Another Fish"
-        )
+        if edit_mode:
 
-        self.save_close_button = QPushButton(
-            "Save & Close"
-        )
+            self.save_close_button = QPushButton(
+                "Save Changes"
+            )
+
+            self.save_add_button = None
+
+        else:
+
+            self.save_add_button = QPushButton(
+                "Save & Add Another Fish"
+            )
+
+            self.save_close_button = QPushButton(
+                "Save & Close"
+            )
 
         cancel_button = QPushButton(
             "Cancel"
@@ -84,9 +96,11 @@ class FishSampleDialog(QDialog):
             self.reject
         )
         
-        self.save_add_button.clicked.connect(
-            self.save_add
-        )
+        if self.save_add_button is not None:
+
+            self.save_add_button.clicked.connect(
+                self.save_add
+            )
 
         self.save_close_button.clicked.connect(
             self.save_close
@@ -95,17 +109,20 @@ class FishSampleDialog(QDialog):
         layout = QVBoxLayout()
 
         layout.addLayout(form)
-        layout.addWidget(
-            self.save_add_button
-        )
+        
+        if self.save_add_button is not None:
+
+            layout.addWidget(
+                self.save_add_button
+            )
 
         layout.addWidget(
             self.save_close_button
-        )
+            )
 
         layout.addWidget(
             cancel_button
-        )
+            )
 
         self.setLayout(layout)
 

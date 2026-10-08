@@ -711,7 +711,9 @@ class MainWindow(QMainWindow):
         if fish_sample is None:
             return
 
-        dialog = FishSampleDialog()
+        dialog = FishSampleDialog(
+            edit_mode=True
+        )
 
         dialog.load_fish(
             fish_sample
