@@ -115,3 +115,29 @@ class CatchSummaryDialog(QDialog):
         self.result_action = "close"
 
         self.accept()
+
+    def load_catch_summary(
+        self,
+        catch_summary,
+    ):
+        """Populate dialog with existing data."""
+
+        self.sam.setText(
+            str(catch_summary.sam)
+        )
+
+        self.eff.setText(
+            str(catch_summary.eff)
+        )
+
+        self.spc.setText(
+            str(catch_summary.spc)
+        )
+
+        self.catcnt.setText(
+            str(catch_summary.catcnt)
+        )
+
+        self.biocnt.setText(
+            str(catch_summary.biocnt)
+        )
