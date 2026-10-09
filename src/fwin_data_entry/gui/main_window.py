@@ -478,6 +478,36 @@ class MainWindow(QMainWindow):
                 )
 
                 continue
+            
+            if not data["spc"]:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    "SPC is required.",
+                )
+
+                continue
+
+            if not data["catcnt"]:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    "CATCNT is required.",
+                )
+
+                continue
+
+            if not data["biocnt"]:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    "BIOCNT is required.",
+                )
+
+                continue
 
             record = CatchSummary(
                 prj_cd=self.current_project.prj_cd,
@@ -488,10 +518,23 @@ class MainWindow(QMainWindow):
                 biocnt=int(data["biocnt"]),
             )
 
-            create_catch_summary(
-                self.current_database,
-                record,
-            )
+            try:
+
+                create_catch_summary(
+                    self.current_database,
+                    record,
+                )
+
+            except ValueError as e:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    str(e),
+                )
+
+                continue
+
 
             self.refresh_workspace()
 
