@@ -151,3 +151,22 @@ def catch_summary_record_exists(
         )
 
         return cursor.fetchone()[0] > 0
+
+def effort_exists(
+    db_path: str,
+    sam: int,
+) -> bool:
+    """Return True if SAM already exists."""
+
+    with get_connection(db_path) as conn:
+
+        cursor = conn.execute(
+            """
+            SELECT COUNT(*)
+            FROM FN121
+            WHERE SAM = ?
+            """,
+            (sam,),
+        )
+
+        return cursor.fetchone()[0] > 0

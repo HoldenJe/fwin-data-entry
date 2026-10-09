@@ -64,7 +64,8 @@ from fwin_data_entry.services.workspace_service import (
     get_sample_fish,
     catch_summary_exists,
     sample_exists,
-    catch_summary_record_exists
+    catch_summary_record_exists,
+    effort_exists,
 )
 
 from fwin_data_entry.services.validation import (
@@ -205,6 +206,21 @@ class MainWindow(QMainWindow):
                 / f"{data['prj_cd']}.sqlite"
             )
 
+            if db_path.exists():
+
+                QMessageBox.warning(
+                    self,
+                    "Project Exists",
+                    (
+                        f"{db_path.name} already "
+                        "exists.\n\n"
+                        "Choose a different "
+                        "project code or location."
+                    ),
+                )
+
+                continue
+            
             initialize_database(str(db_path))
 
             try:
@@ -323,6 +339,23 @@ class MainWindow(QMainWindow):
                 return
 
             data = dialog.get_data()
+            if effort_exists(
+                self.current_database,
+                int(data["sam"]),
+            ):
+
+                QMessageBox.warning(
+                    self,
+                    "Sample Exists",
+                    (
+                        f"SAM {data['sam']} already "
+                        "exists.\n\n"
+                        "Use Edit Sample to modify "
+                        "the existing record."
+                    ),
+                )
+
+                continue
 
             effort = Effort(
                 prj_cd=self.current_project.prj_cd,
