@@ -10,7 +10,7 @@ class CatchSummary:
     prj_cd: str
     sam: int
     eff: int
-    spc: int
+    spc: str
 
     catcnt: int = 0
     biocnt: int = 0

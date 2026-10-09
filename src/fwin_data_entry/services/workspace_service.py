@@ -86,7 +86,7 @@ def get_sample_fish(
 def catch_summary_exists(
     db_path: str,
     sam: int,
-    spc: int,
+    spc: str,
 ) -> bool:
     """Return True if FN123 record exists."""
 
@@ -130,7 +130,7 @@ def sample_exists(
 def catch_summary_record_exists(
     db_path: str,
     sam: int,
-    spc: int,
+    spc: str,
 ) -> bool:
     """Return True if FN123 record already exists."""
 

@@ -18,7 +18,7 @@ def create_catch_summary(
 
     validate_positive_integer(catch_summary.sam, "SAM")
     validate_positive_integer(catch_summary.eff, "EFF")
-    validate_positive_integer(catch_summary.spc, "SPC")
+    validate_required(catch_summary.spc, "SPC")
 
     validate_non_negative_integer(
         catch_summary.catcnt,
@@ -66,7 +66,7 @@ def get_catch_summary(
     prj_cd: str,
     sam: int,
     eff: int,
-    spc: int,
+    spc: str,
 ) -> CatchSummary | None:
     """Retrieve an FN123 record."""
 
@@ -139,7 +139,7 @@ def get_catch_summary(
         prj_cd: str,
         sam: int,
         eff: int,
-        spc: int,
+        spc: str,
     ) -> CatchSummary | None:
         """Return a single FN123 record."""
 
