@@ -16,9 +16,11 @@ class FishSampleDialog(QDialog):
         self,
         sam: int | None = None,
         fish: int | None = None,
+        edit_mode: bool = False,
     ):
         super().__init__()
-
+        self.edit_mode = edit_mode
+        self.result_action = None
         self.setWindowTitle(
             "New Fish Sample"
         )
@@ -68,17 +70,59 @@ class FishSampleDialog(QDialog):
 
         form.addRow("TISSUE", self.tissue)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(self.accept)
+        if edit_mode:
 
-        cancel_button = QPushButton("Cancel")
-        cancel_button.clicked.connect(self.reject)
+            self.save_close_button = QPushButton(
+                "Save Changes"
+            )
 
+            self.save_add_button = None
+
+        else:
+
+            self.save_add_button = QPushButton(
+                "Save & Add Another Fish"
+            )
+
+            self.save_close_button = QPushButton(
+                "Save & Close"
+            )
+
+        cancel_button = QPushButton(
+            "Cancel"
+        )
+
+        cancel_button.clicked.connect(
+            self.reject
+        )
+        
+        if self.save_add_button is not None:
+
+            self.save_add_button.clicked.connect(
+                self.save_add
+            )
+
+        self.save_close_button.clicked.connect(
+            self.save_close
+        )
+        
         layout = QVBoxLayout()
 
         layout.addLayout(form)
-        layout.addWidget(ok_button)
-        layout.addWidget(cancel_button)
+        
+        if self.save_add_button is not None:
+
+            layout.addWidget(
+                self.save_add_button
+            )
+
+        layout.addWidget(
+            self.save_close_button
+            )
+
+        layout.addWidget(
+            cancel_button
+            )
 
         self.setLayout(layout)
 
@@ -101,3 +145,88 @@ class FishSampleDialog(QDialog):
             "eviswt": self.eviswt.text(),
             "tissue": self.tissue.text(),
         }
+
+    def save_add(self):
+        """Save and continue."""
+
+        self.result_action = "add"
+
+        self.accept()
+
+
+    def save_close(self):
+        """Save and close."""
+
+        self.result_action = "close"
+
+        self.accept()
+
+    def clear_fish_fields(self):
+        """Prepare for next fish."""
+
+        self.flen.clear()
+        self.tlen.clear()
+        self.rwt.clear()
+
+        self.sex.clear()
+        self.mat.clear()
+
+        self.agest.clear()
+        self.stom.clear()
+
+        self.taxon.clear()
+
+        self.gonwt.clear()
+        self.eviswt.clear()
+
+        self.tissue.clear()
+
+        self.flen.setFocus()
+
+    def load_fish(self, fish_sample):
+        """Populate dialog with existing data."""
+
+        self.sam.setText(str(fish_sample.sam))
+        self.spc.setText(str(fish_sample.spc))
+        self.fish.setText(str(fish_sample.fish))
+
+        self.flen.setText(
+            "" if fish_sample.flen is None
+            else str(fish_sample.flen)
+        )
+
+        self.tlen.setText(
+            "" if fish_sample.tlen is None
+            else str(fish_sample.tlen)
+        )
+
+        self.rwt.setText(
+            "" if fish_sample.rwt is None
+            else str(fish_sample.rwt)
+        )
+
+        self.sex.setText(
+            "" if fish_sample.sex is None
+            else str(fish_sample.sex)
+        )
+
+        self.mat.setText(
+            "" if fish_sample.mat is None
+            else str(fish_sample.mat)
+        )
+
+        self.agest.setText(fish_sample.agest)
+        self.stom.setText(fish_sample.stom)
+        self.taxon.setText(fish_sample.taxon)
+
+        self.gonwt.setText(
+            "" if fish_sample.gonwt is None
+            else str(fish_sample.gonwt)
+        )
+
+        self.eviswt.setText(
+            "" if fish_sample.eviswt is None
+            else str(fish_sample.eviswt)
+        )
+
+        self.tissue.setText(fish_sample.tissue)

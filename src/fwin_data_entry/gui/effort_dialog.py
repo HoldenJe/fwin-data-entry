@@ -13,9 +13,15 @@ from PySide6.QtWidgets import (
 class EffortDialog(QDialog):
     """FN121 effort entry dialog."""
 
-    def __init__(self, sam: int | None = None):
-        super().__init__()
+    def __init__(
+            self,
+            sam: int | None = None,
+            edit_mode: bool = False,
+        ):
 
+        super().__init__()
+        self.edit_mode = edit_mode
+        self.result_action = None
         self.setWindowTitle("New Effort")
 
         self.sam = QLineEdit()
@@ -49,17 +55,57 @@ class EffortDialog(QDialog):
         form.addRow("Crew", self.crew)
         form.addRow("Comment", self.comment)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(self.accept)
+        if edit_mode:
 
-        cancel_button = QPushButton("Cancel")
-        cancel_button.clicked.connect(self.reject)
+            self.save_close_button = QPushButton(
+                "Save Changes"
+            )
 
+            self.save_add_button = None
+
+        else:
+
+            self.save_add_button = QPushButton(
+                "Save & Add Another SAM"
+            )
+
+            self.save_close_button = QPushButton(
+                "Save & Close"
+            )
+
+        cancel_button = QPushButton(
+            "Cancel"
+        )
+
+        cancel_button.clicked.connect(
+            self.reject
+        )
+
+        if self.save_add_button is not None:
+
+            self.save_add_button.clicked.connect(
+                self.save_add
+            )
+
+        self.save_close_button.clicked.connect(
+            self.save_close
+        )
         layout = QVBoxLayout()
 
         layout.addLayout(form)
-        layout.addWidget(ok_button)
-        layout.addWidget(cancel_button)
+        if self.save_add_button is not None:
+
+            layout.addWidget(
+                self.save_add_button
+            )
+
+        layout.addWidget(
+            self.save_close_button
+        )
+
+        layout.addWidget(
+            cancel_button
+        )
 
         self.setLayout(layout)
 
@@ -78,3 +124,73 @@ class EffortDialog(QDialog):
             "crew": self.crew.text(),
             "comment": self.comment.toPlainText(),
         }
+
+    def load_effort(
+        self,
+        effort,
+    ):
+        """Populate dialog with existing values."""
+
+        self.sam.setText(str(effort.sam))
+
+        self.gr.setText(effort.gr)
+        self.area.setText(effort.area)
+
+        self.effdt0.setText(effort.effdt0)
+        self.efftm0.setText(effort.efftm0)
+
+        self.dd_lat0.setText(
+            "" if effort.dd_lat0 is None
+            else str(effort.dd_lat0)
+        )
+
+        self.dd_lon0.setText(
+            "" if effort.dd_lon0 is None
+            else str(effort.dd_lon0)
+        )
+
+        self.secchi.setText(
+            "" if effort.secchi is None
+            else str(effort.secchi)
+        )
+
+        self.crew.setText(effort.crew)
+
+        self.comment.setPlainText(
+            effort.comment
+        )
+
+    def save_add(self):
+        """Save and continue."""
+
+        self.result_action = "add"
+
+        self.accept()
+
+
+    def save_close(self):
+        """Save and close."""
+
+        self.result_action = "close"
+
+        self.accept()
+
+    def clear_sam_fields(self):
+        """Prepare for next SAM."""
+
+        self.area.clear()
+
+        self.effdt0.clear()
+        self.efftm0.clear()
+
+        self.dd_lat0.clear()
+        self.dd_lon0.clear()
+
+        self.secchi.clear()
+
+        self.comment.clear()
+
+        # GR intentionally retained
+        # Crew intentionally retained
+
+        self.gr.setFocus()

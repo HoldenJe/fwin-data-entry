@@ -138,3 +138,45 @@ def get_next_sam(
         return 1
 
     return result + 1
+
+def update_effort(
+    db_path: str,
+    effort: Effort,
+) -> None:
+    """Update an FN121 record."""
+
+    with get_connection(db_path) as conn:
+
+        conn.execute(
+            """
+            UPDATE FN121
+            SET
+                GR = ?,
+                AREA = ?,
+                EFFDT0 = ?,
+                EFFTM0 = ?,
+                DD_LAT0 = ?,
+                DD_LON0 = ?,
+                SECCHI = ?,
+                CREW = ?,
+                COMMENT = ?
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+            """,
+            (
+                effort.gr,
+                effort.area,
+                effort.effdt0,
+                effort.efftm0,
+                effort.dd_lat0,
+                effort.dd_lon0,
+                effort.secchi,
+                effort.crew,
+                effort.comment,
+                effort.prj_cd,
+                effort.sam,
+            ),
+        )
+
+        conn.commit()
