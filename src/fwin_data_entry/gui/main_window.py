@@ -444,7 +444,7 @@ class MainWindow(QMainWindow):
             if catch_summary_record_exists(
                 self.current_database,
                 int(data["sam"]),
-                int(data["spc"]),
+                str(data["spc"]),
             ):
 
                 QMessageBox.warning(
@@ -481,7 +481,7 @@ class MainWindow(QMainWindow):
                 prj_cd=self.current_project.prj_cd,
                 sam=int(data["sam"]),
                 eff=int(data["eff"]),
-                spc=int(data["spc"]),
+                spc=data["spc"].zfill(3),
                 catcnt=int(data["catcnt"]),
                 biocnt=int(data["biocnt"]),
             )
@@ -532,7 +532,7 @@ class MainWindow(QMainWindow):
             if not catch_summary_exists(
                 self.current_database,
                 int(data["sam"]),
-                int(data["spc"]),
+                str(data["spc"]),
             ):
 
                 QMessageBox.warning(
@@ -552,14 +552,14 @@ class MainWindow(QMainWindow):
                 self.current_project.prj_cd,
                 int(data["sam"]),
                 999,
-                int(data["spc"]),
+                str(data["spc"]),
             )
 
             record = FishSample(
                 prj_cd=self.current_project.prj_cd,
                 sam=int(data["sam"]),
                 eff=999,
-                spc=int(data["spc"]),
+                spc=data["spc"].zfill(3),
                 fish=next_fish,
                 flen=float(data["flen"])
                 if data["flen"]
@@ -800,12 +800,10 @@ class MainWindow(QMainWindow):
 
         if enabled:
 
-            spc = int(
-                self.workspace.catch_table.item(
+            spc = self.workspace.catch_table.item(
                     row,
                     0,
                 ).text()
-            )
 
             self.selected_catch = spc
 
@@ -840,12 +838,11 @@ class MainWindow(QMainWindow):
                 ).text()
             )
 
-            spc = int(
-                self.workspace.fish_table.item(
+            spc = self.workspace.fish_table.item(
                     row,
                     1,
                 ).text()
-            )
+            
 
             self.selected_fish = (
                 fish,

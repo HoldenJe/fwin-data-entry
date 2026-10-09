@@ -61,7 +61,7 @@ def get_fish_sample(
     prj_cd: str,
     sam: int,
     eff: int,
-    spc: int,
+    spc: str,
     fish: int,
 ) -> FishSample | None:
     """Retrieve an FN125 record."""
@@ -115,7 +115,7 @@ def get_next_fish(
     prj_cd: str,
     sam: int,
     eff: int,
-    spc: int,
+    spc: str,
 ) -> int:
     """Return the next available fish number."""
 
@@ -201,7 +201,7 @@ def update_fish_sample(
         prj_cd: str,
         sam: int,
         eff: int,
-        spc: int,
+        spc: str,
         fish: int,
     ) -> FishSample | None:
         """Return a single fish record."""

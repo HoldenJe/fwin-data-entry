@@ -10,7 +10,7 @@ class FishSample:
     prj_cd: str
     sam: int
     eff: int
-    spc: int
+    spc: str
     fish: int
 
     flen: float | None = None
