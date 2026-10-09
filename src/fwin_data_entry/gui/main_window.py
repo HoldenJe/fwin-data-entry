@@ -242,6 +242,7 @@ class MainWindow(QMainWindow):
 
             self.current_project = project
             self.current_database = str(db_path)
+            self.clear_workspace()
 
             self.workspace.project_label.setText(
                 (
@@ -292,6 +293,7 @@ class MainWindow(QMainWindow):
 
         self.current_project = project
         self.current_database = filename
+        self.clear_workspace()
 
         self.workspace.project_label.setText(
  
@@ -1019,3 +1021,40 @@ class MainWindow(QMainWindow):
         )
 
         self.refresh_workspace()
+
+    def clear_workspace(self):
+        """Clear sample-specific workspace data."""
+
+        self.current_sam = None
+
+        self.workspace.sample_details.setText(
+            "No sample selected"
+        )
+
+        self.workspace.catch_table.setRowCount(0)
+
+        self.workspace.fish_table.setRowCount(0)
+
+        self.workspace.edit_sample_button.setEnabled(
+            False
+        )
+
+        self.workspace.edit_catch_button.setEnabled(
+            False
+        )
+
+        self.workspace.delete_catch_button.setEnabled(
+            False
+        )
+
+        self.workspace.edit_fish_button.setEnabled(
+            False
+        )
+
+        self.workspace.delete_fish_button.setEnabled(
+            False
+        )
+        self.workspace.sam_list.clearSelection()
+
+        self.selected_fish = None
+        self.selected_catch = None
