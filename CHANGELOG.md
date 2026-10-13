@@ -1,3 +1,73 @@
+# FWIN Data Entry v0.4.0
+
+## Highlights
+
+This release completes support for FN121 effort entry and introduces additional validation and usability improvements throughout the application.
+
+## Added
+
+### FN121 Effort Entry
+
+Added support for:
+
+- Site Temperature (SITEM0)
+- Minimum Gear Depth (GRDEPMIN)
+- Maximum Gear Depth (GRDEPMAX)
+- Lift Date (EFFDT1)
+- Lift Time (EFFTM1)
+- Effort Status (EFFST)
+
+### Validation
+
+Added validation for:
+
+- Site Temperature
+- Secchi Depth
+- Minimum Gear Depth
+- Maximum Gear Depth
+
+Added validation to ensure:
+
+- Numeric values are non-negative
+- Maximum Gear Depth cannot be less than Minimum Gear Depth
+
+### User Experience
+
+Improved error handling during record editing.
+
+Validation errors now:
+
+- Display user-friendly warning messages
+- Keep dialogs open for correction
+- Prevent application tracebacks during normal use
+
+## Existing Functionality
+
+- FN011 project management
+- FN121 effort entry and editing
+- FN123 catch summaries
+- FN125 fish samples
+- User-selectable database locations
+- Referential integrity validation
+- Species code support with leading zeros
+
+## Known Areas for Future Improvement
+
+- Date validation
+- Time validation
+- Additional automated testing
+- Executable packaging refinements
+
+## Feedback Requested
+
+Please report:
+
+- Data entry issues
+- Validation concerns
+- Workflow improvements
+- Application crashes
+- User interface suggestions
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
