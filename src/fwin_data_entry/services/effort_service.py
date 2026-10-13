@@ -5,6 +5,7 @@ from fwin_data_entry.models.effort import Effort
 from fwin_data_entry.services.validation import (
     validate_required,
     validate_positive_integer,
+    validate_non_negative
 )
 
 def create_effort(
@@ -16,9 +17,36 @@ def create_effort(
     validate_required(effort.prj_cd, "PRJ_CD")
     validate_required(effort.gr, "GR")
     validate_required(effort.area, "AREA")
-
     validate_positive_integer(effort.sam, "SAM")
+    validate_non_negative(
+        effort.sitem0,
+        "SITEM0",
+    )
+
+    validate_non_negative(
+        effort.secchi,
+        "SECCHI",
+    )
+
+    validate_non_negative(
+        effort.grdepmin,
+        "GRDEPMIN",
+    )
+
+    validate_non_negative(
+        effort.grdepmax,
+        "GRDEPMAX",
+    )
     
+    if (
+            effort.grdepmin is not None
+        and effort.grdepmax is not None
+        and effort.grdepmax < effort.grdepmin
+    ):
+        raise ValueError(
+            "GRDEPMAX must be greater than or equal to GRDEPMIN."
+        )
+
     with get_connection(db_path) as conn:
         conn.execute(
             """
@@ -144,7 +172,34 @@ def update_effort(
     effort: Effort,
 ) -> None:
     """Update an FN121 record."""
+    validate_non_negative(
+        effort.sitem0,
+        "SITEM0",
+    )
 
+    validate_non_negative(
+        effort.secchi,
+        "SECCHI",
+    )
+
+    validate_non_negative(
+        effort.grdepmin,
+        "GRDEPMIN",
+    )
+
+    validate_non_negative(
+        effort.grdepmax,
+        "GRDEPMAX",
+    )
+
+    if (
+        effort.grdepmin is not None
+        and effort.grdepmax is not None
+        and effort.grdepmax < effort.grdepmin
+    ):
+        raise ValueError(
+            "GRDEPMAX must be greater than or equal to GRDEPMIN."
+        )
     with get_connection(db_path) as conn:
 
         conn.execute(
@@ -155,9 +210,15 @@ def update_effort(
                 AREA = ?,
                 EFFDT0 = ?,
                 EFFTM0 = ?,
+                SITEM0 = ?,
                 DD_LAT0 = ?,
                 DD_LON0 = ?,
                 SECCHI = ?,
+                GRDEPMIN = ?,
+                GRDEPMAX = ?,
+                EFFDT1 = ?,
+                EFFTM1 = ?,
+                EFFST = ?,
                 CREW = ?,
                 COMMENT = ?
             WHERE
@@ -169,9 +230,15 @@ def update_effort(
                 effort.area,
                 effort.effdt0,
                 effort.efftm0,
+                effort.sitem0,
                 effort.dd_lat0,
                 effort.dd_lon0,
                 effort.secchi,
+                effort.grdepmin,
+                effort.grdepmax,
+                effort.effdt1,
+                effort.efftm1,
+                effort.effst,
                 effort.crew,
                 effort.comment,
                 effort.prj_cd,
