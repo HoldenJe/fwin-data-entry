@@ -1055,50 +1055,66 @@ class MainWindow(QMainWindow):
             effort
         )
 
-        if not dialog.exec():
-            return
+        while True:
 
-        data = dialog.get_data()
+            if not dialog.exec():
+                return
 
-        updated_effort = Effort(
-            prj_cd=effort.prj_cd,
-            sam=effort.sam,
-            eff=effort.eff,
-            gr=data["gr"],
-            area=data["area"],
-            effdt0=data["effdt0"],
-            efftm0=data["efftm0"],
-            dd_lat0=float(data["dd_lat0"])
-            if data["dd_lat0"]
-            else None,
-            dd_lon0=float(data["dd_lon0"])
-            if data["dd_lon0"]
-            else None,
-            sitem0=float(data["sitem0"])
-            if data["sitem0"]
-            else None,
-            secchi=float(data["secchi"])
-            if data["secchi"]
-            else None,
-            grdepmin=float(data["grdepmin"])
-            if data["grdepmin"]
-            else None,
-            grdepmax=float(data["grdepmax"])
-            if data["grdepmax"]
-            else None,
-            effdt1=data["effdt1"],
-            efftm1=data["efftm1"],
-            effst=int(data["effst"])
-            if data["effst"]
-            else None,
-            crew=data["crew"],
-            comment=data["comment"],
-        )
+            data = dialog.get_data()
 
-        update_effort(
-            self.current_database,
-            updated_effort,
-        )
+            updated_effort = Effort(
+                prj_cd=effort.prj_cd,
+                sam=effort.sam,
+                eff=effort.eff,
+                gr=data["gr"],
+                area=data["area"],
+                effdt0=data["effdt0"],
+                efftm0=data["efftm0"],
+                dd_lat0=float(data["dd_lat0"])
+                if data["dd_lat0"]
+                else None,
+                dd_lon0=float(data["dd_lon0"])
+                if data["dd_lon0"]
+                else None,
+                sitem0=float(data["sitem0"])
+                if data["sitem0"]
+                else None,
+                secchi=float(data["secchi"])
+                if data["secchi"]
+                else None,
+                grdepmin=float(data["grdepmin"])
+                if data["grdepmin"]
+                else None,
+                grdepmax=float(data["grdepmax"])
+                if data["grdepmax"]
+                else None,
+                effdt1=data["effdt1"],
+                efftm1=data["efftm1"],
+                effst=int(data["effst"])
+                if data["effst"]
+                else None,
+                crew=data["crew"],
+                comment=data["comment"],
+            )
+
+            try:
+
+                update_effort(
+                    self.current_database,
+                    updated_effort,
+                )
+
+            except ValueError as e:
+
+                QMessageBox.warning(
+                    self,
+                    "Validation Error",
+                    str(e),
+                )
+
+                continue
+
+            break
 
         self.refresh_workspace()
 

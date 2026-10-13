@@ -25,3 +25,16 @@ def validate_biocnt(catcnt: int, biocnt: int) -> None:
     if biocnt > catcnt:
         raise ValueError("BIOCNT cannot exceed CATCNT.")
 
+def validate_non_negative(
+    value: float | None,
+    field_name: str,
+) -> None:
+    """Validate non-negative numeric values."""
+
+    if value is None:
+        return
+
+    if value < 0:
+        raise ValueError(
+            f"{field_name} must be zero or greater."
+        )
