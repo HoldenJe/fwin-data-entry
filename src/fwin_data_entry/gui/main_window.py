@@ -366,15 +366,38 @@ class MainWindow(QMainWindow):
                 area=data["area"],
                 effdt0=data["effdt0"],
                 efftm0=data["efftm0"],
+
+                sitem0=float(data["sitem0"])
+                if data["sitem0"]
+                else None,
+
                 dd_lat0=float(data["dd_lat0"])
                 if data["dd_lat0"]
                 else None,
+
                 dd_lon0=float(data["dd_lon0"])
                 if data["dd_lon0"]
                 else None,
+
                 secchi=float(data["secchi"])
                 if data["secchi"]
                 else None,
+
+                grdepmin=float(data["grdepmin"])
+                if data["grdepmin"]
+                else None,
+
+                grdepmax=float(data["grdepmax"])
+                if data["grdepmax"]
+                else None,
+
+                effdt1=data["effdt1"],
+                efftm1=data["efftm1"],
+
+                effst=int(data["effst"])
+                if data["effst"]
+                else None,
+
                 crew=data["crew"],
                 comment=data["comment"],
             )
@@ -1051,8 +1074,22 @@ class MainWindow(QMainWindow):
             dd_lon0=float(data["dd_lon0"])
             if data["dd_lon0"]
             else None,
+            sitem0=float(data["sitem0"])
+            if data["sitem0"]
+            else None,
             secchi=float(data["secchi"])
             if data["secchi"]
+            else None,
+            grdepmin=float(data["grdepmin"])
+            if data["grdepmin"]
+            else None,
+            grdepmax=float(data["grdepmax"])
+            if data["grdepmax"]
+            else None,
+            effdt1=data["effdt1"],
+            efftm1=data["efftm1"],
+            effst=int(data["effst"])
+            if data["effst"]
             else None,
             crew=data["crew"],
             comment=data["comment"],

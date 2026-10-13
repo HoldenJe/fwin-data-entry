@@ -32,7 +32,15 @@ class EffortDialog(QDialog):
 
         self.effdt0 = QLineEdit()
         self.efftm0 = QLineEdit()
+        self.sitem0 = QLineEdit()
 
+        self.grdepmin = QLineEdit()
+        self.grdepmax = QLineEdit()
+
+        self.effdt1 = QLineEdit()
+        self.efftm1 = QLineEdit()
+
+        self.effst = QLineEdit()
         self.dd_lat0 = QLineEdit()
         self.dd_lon0 = QLineEdit()
 
@@ -49,9 +57,15 @@ class EffortDialog(QDialog):
         form.addRow("AREA", self.area)
         form.addRow("Set Date", self.effdt0)
         form.addRow("Set Time", self.efftm0)
+        form.addRow("Site Temp", self.sitem0)
         form.addRow("Latitude", self.dd_lat0)
         form.addRow("Longitude", self.dd_lon0)
         form.addRow("Secchi", self.secchi)
+        form.addRow("Min Gear Depth", self.grdepmin)
+        form.addRow("Max Gear Depth", self.grdepmax)
+        form.addRow("Lift Date", self.effdt1)
+        form.addRow("Lift Time", self.efftm1)
+        form.addRow("Effort Status", self.effst)
         form.addRow("Crew", self.crew)
         form.addRow("Comment", self.comment)
 
@@ -118,9 +132,22 @@ class EffortDialog(QDialog):
             "area": self.area.text(),
             "effdt0": self.effdt0.text(),
             "efftm0": self.efftm0.text(),
+
+            "sitem0": self.sitem0.text(),
+
             "dd_lat0": self.dd_lat0.text(),
             "dd_lon0": self.dd_lon0.text(),
+
             "secchi": self.secchi.text(),
+
+            "grdepmin": self.grdepmin.text(),
+            "grdepmax": self.grdepmax.text(),
+
+            "effdt1": self.effdt1.text(),
+            "efftm1": self.efftm1.text(),
+
+            "effst": self.effst.text(),
+
             "crew": self.crew.text(),
             "comment": self.comment.toPlainText(),
         }
@@ -138,7 +165,10 @@ class EffortDialog(QDialog):
 
         self.effdt0.setText(effort.effdt0)
         self.efftm0.setText(effort.efftm0)
-
+        self.sitem0.setText(
+            "" if effort.sitem0 is None
+            else str(effort.sitem0)
+        )
         self.dd_lat0.setText(
             "" if effort.dd_lat0 is None
             else str(effort.dd_lat0)
@@ -152,6 +182,31 @@ class EffortDialog(QDialog):
         self.secchi.setText(
             "" if effort.secchi is None
             else str(effort.secchi)
+        )
+
+        self.grdepmin.setText(
+            "" if effort.grdepmin is None
+            else str(effort.grdepmin)
+        )
+
+        self.grdepmax.setText(
+            "" if effort.grdepmax is None
+            else str(effort.grdepmax)
+        )
+
+        self.effdt1.setText(
+            "" if effort.effdt1 is None
+            else effort.effdt1
+        )
+
+        self.efftm1.setText(
+            "" if effort.efftm1 is None
+            else effort.efftm1
+        )
+
+        self.effst.setText(
+            "" if effort.effst is None
+            else str(effort.effst)
         )
 
         self.crew.setText(effort.crew)
@@ -187,7 +242,15 @@ class EffortDialog(QDialog):
         self.dd_lon0.clear()
 
         self.secchi.clear()
+        self.sitem0.clear()
 
+        self.grdepmin.clear()
+        self.grdepmax.clear()
+
+        self.effdt1.clear()
+        self.efftm1.clear()
+
+        self.effst.clear()
         self.comment.clear()
 
         # GR intentionally retained
