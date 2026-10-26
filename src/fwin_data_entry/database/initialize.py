@@ -24,6 +24,35 @@ def initialize_database(db_path: str) -> None:
         cursor.execute(FN123_SQL)
         cursor.execute(FN125_SQL)
 
+        ensure_fn125_comment_column(conn)
+
         conn.commit()
 
     print(f"Database initialized: {db_path}")
+
+def ensure_fn125_comment_column(
+    conn: sqlite3.Connection,
+) -> None:
+    """Add COMMENT column to FN125 if missing."""
+
+    cursor = conn.execute(
+        "PRAGMA table_info(FN125)"
+    )
+
+    columns = [
+        row[1]
+        for row in cursor.fetchall()
+    ]
+
+    if "COMMENT" not in columns:
+
+        conn.execute(
+            """
+            ALTER TABLE FN125
+            ADD COLUMN COMMENT TEXT
+            """
+        )
+
+        print(
+            "Migrated FN125: added COMMENT column"
+        )

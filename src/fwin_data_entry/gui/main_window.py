@@ -279,6 +279,10 @@ class MainWindow(QMainWindow):
         if not filename:
             return
 
+        initialize_database(
+            filename
+        )
+        
         project = get_first_project(
             filename,
         )
@@ -654,6 +658,7 @@ class MainWindow(QMainWindow):
                 if data["eviswt"]
                 else None,
                 tissue=data["tissue"],
+                comment=data["comment"],
             )
 
             create_fish_sample(
@@ -984,6 +989,7 @@ class MainWindow(QMainWindow):
             if data["eviswt"]
             else None,
             tissue=data["tissue"],
+            comment=data["comment"],
         )
 
         update_fish_sample(

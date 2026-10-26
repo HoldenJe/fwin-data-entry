@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (
     QFormLayout,
     QLineEdit,
     QPushButton,
+    QTextEdit,
     QVBoxLayout,
 )
 
@@ -48,6 +49,8 @@ class FishSampleDialog(QDialog):
 
         self.tissue = QLineEdit()
 
+        self.comment = QTextEdit()
+
         form = QFormLayout()
 
         form.addRow("SAM", self.sam)
@@ -69,6 +72,7 @@ class FishSampleDialog(QDialog):
         form.addRow("EVISWT", self.eviswt)
 
         form.addRow("TISSUE", self.tissue)
+        form.addRow("COMMENT", self.comment)
 
         if edit_mode:
 
@@ -144,6 +148,7 @@ class FishSampleDialog(QDialog):
             "gonwt": self.gonwt.text(),
             "eviswt": self.eviswt.text(),
             "tissue": self.tissue.text(),
+            "comment": self.comment.toPlainText(),
         }
 
     def save_add(self):
@@ -180,6 +185,7 @@ class FishSampleDialog(QDialog):
         self.eviswt.clear()
 
         self.tissue.clear()
+        self.comment.clear()
 
         self.flen.setFocus()
 
@@ -230,3 +236,6 @@ class FishSampleDialog(QDialog):
         )
 
         self.tissue.setText(fish_sample.tissue)
+        self.comment.setPlainText(
+            fish_sample.comment
+        )

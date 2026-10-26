@@ -28,3 +28,5 @@ class FishSample:
     eviswt: float | None = None
 
     tissue: str = ""
+
+    comment: str = ""

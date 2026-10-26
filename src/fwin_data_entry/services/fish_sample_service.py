@@ -29,9 +29,10 @@ def create_fish_sample(
                 TAXON,
                 GONWT,
                 EVISWT,
-                TISSUE
+                TISSUE,
+                COMMENT
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 fish_sample.prj_cd,
@@ -50,6 +51,7 @@ def create_fish_sample(
                 fish_sample.gonwt,
                 fish_sample.eviswt,
                 fish_sample.tissue,
+                fish_sample.comment,
             ),
         )
 
@@ -108,6 +110,7 @@ def get_fish_sample(
         gonwt=row[13],
         eviswt=row[14],
         tissue=row[15],
+        comment=row[16],
     )
     
 def get_next_fish(
@@ -166,7 +169,8 @@ def update_fish_sample(
                 TAXON = ?,
                 GONWT = ?,
                 EVISWT = ?,
-                TISSUE = ?
+                TISSUE = ?,
+                COMMENT = ?
             WHERE
                 PRJ_CD = ?
                 AND SAM = ?
@@ -186,6 +190,7 @@ def update_fish_sample(
                 fish_sample.gonwt,
                 fish_sample.eviswt,
                 fish_sample.tissue,
+                fish_sample.comment,
                 fish_sample.prj_cd,
                 fish_sample.sam,
                 fish_sample.eff,
