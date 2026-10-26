@@ -52,6 +52,7 @@ from fwin_data_entry.services.fish_sample_service import (
     get_next_fish,
     get_fish_sample,
     update_fish_sample,
+    delete_fish_sample,
 )
 from fwin_data_entry.services.project_service import (
     create_project,
@@ -120,6 +121,9 @@ class MainWindow(QMainWindow):
         )
         self.workspace.edit_sample_button.clicked.connect(
             self.edit_sample
+        )
+        self.workspace.delete_fish_button.clicked.connect(
+            self.delete_fish
         )
         
     def _create_menu(self):
@@ -998,6 +1002,45 @@ class MainWindow(QMainWindow):
         )
 
         self.refresh_workspace()
+
+    def delete_fish(self):
+        """Delete selected fish."""
+
+        if self.selected_fish is None:
+            return
+
+        fish_number, spc = self.selected_fish
+
+        reply = QMessageBox.question(
+            self,
+            "Delete Fish",
+            (
+                f"Delete fish {fish_number} "
+                f"for SPC {spc}?\n\n"
+                "This action cannot be undone."
+            ),
+            QMessageBox.Yes | QMessageBox.No,
+        )
+
+        if reply != QMessageBox.Yes:
+            return
+
+        delete_fish_sample(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+            fish_number,
+        )
+        self.selected_fish = None
+        self.refresh_workspace()
+
+        QMessageBox.information(
+            self,
+            "Delete Fish",
+            "Fish deleted."
+        )
 
     def edit_catch_summary(self):
         """Edit selected catch summary."""
