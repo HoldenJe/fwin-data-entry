@@ -8,6 +8,7 @@ from fwin_data_entry.database.schema import (
     FN121_SQL,
     FN123_SQL,
     FN125_SQL,
+    FN127_SQL
 )
 
 
@@ -23,8 +24,10 @@ def initialize_database(db_path: str) -> None:
         cursor.execute(FN121_SQL)
         cursor.execute(FN123_SQL)
         cursor.execute(FN125_SQL)
+        cursor.execute(FN127_SQL)
 
         ensure_fn125_comment_column(conn)
+        ensure_fn127_table(conn)
 
         conn.commit()
 
@@ -56,3 +59,10 @@ def ensure_fn125_comment_column(
         print(
             "Migrated FN125: added COMMENT column"
         )
+
+def ensure_fn127_table(
+    conn: sqlite3.Connection,
+) -> None:
+    """Create FN127 table if missing."""
+
+    conn.execute(FN127_SQL)
