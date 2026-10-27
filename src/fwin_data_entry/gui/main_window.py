@@ -73,6 +73,9 @@ from fwin_data_entry.services.validation import (
     validate_required,
 )
 
+from fwin_data_entry.services.age_record_service import (
+    delete_age_records_for_fish,
+)
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -1025,6 +1028,15 @@ class MainWindow(QMainWindow):
         if reply != QMessageBox.Yes:
             return
 
+        delete_age_records_for_fish(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+            fish_number,
+        )
+        
         delete_fish_sample(
             self.current_database,
             self.current_project.prj_cd,
