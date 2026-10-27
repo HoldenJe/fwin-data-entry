@@ -3,11 +3,12 @@
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.catch_summary import CatchSummary
 from fwin_data_entry.services.validation import (
-    validate_required,
-    validate_positive_integer,
-    validate_non_negative_integer,
     validate_biocnt,
+    validate_non_negative_integer,
+    validate_positive_integer,
+    validate_required,
 )
+
 
 def create_catch_summary(
     db_path: str,
@@ -134,45 +135,32 @@ def update_catch_summary(
 
             conn.commit()
 
-def get_catch_summary(
-        db_path: str,
-        prj_cd: str,
-        sam: int,
-        eff: int,
-        spc: str,
-    ) -> CatchSummary | None:
-        """Return a single FN123 record."""
+def delete_catch_summary(
+    db_path: str,
+    prj_cd: str,
+    sam: int,
+    eff: int,
+    spc: str,
+) -> None:
+    """Delete an FN123 record."""
 
-        with get_connection(db_path) as conn:
+    with get_connection(db_path) as conn:
 
-            cursor = conn.execute(
-                """
-                SELECT *
-                FROM FN123
-                WHERE
-                    PRJ_CD = ?
-                    AND SAM = ?
-                    AND EFF = ?
-                    AND SPC = ?
-                """,
-                (
-                    prj_cd,
-                    sam,
-                    eff,
-                    spc,
-                ),
-            )
-
-            row = cursor.fetchone()
-
-        if row is None:
-            return None
-
-        return CatchSummary(
-            prj_cd=row[0],
-            sam=row[1],
-            eff=row[2],
-            spc=row[3],
-            catcnt=row[4],
-            biocnt=row[5],
+        conn.execute(
+            """
+            DELETE FROM FN123
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+                AND EFF = ?
+                AND SPC = ?
+            """,
+            (
+                prj_cd,
+                sam,
+                eff,
+                spc,
+            ),
         )
+
+        conn.commit()
