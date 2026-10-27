@@ -4,7 +4,6 @@ from pathlib import Path
 
 from PySide6.QtWidgets import (
     QFileDialog,
-    QLabel,
     QMainWindow,
     QMessageBox,
     QTableWidgetItem,
@@ -36,51 +35,47 @@ from fwin_data_entry.models.fish_sample import (
     FishSample,
 )
 from fwin_data_entry.models.project import Project
+from fwin_data_entry.services.age_record_service import (
+    delete_age_records_for_fish,
+)
+from fwin_data_entry.services.cascade_delete_service import (
+    delete_catch_summary_children,
+)
 from fwin_data_entry.services.catch_summary_service import (
     create_catch_summary,
+    delete_catch_summary,
     get_catch_summary,
     update_catch_summary,
-    delete_catch_summary,
-
 )
 from fwin_data_entry.services.effort_service import (
     create_effort,
-    get_next_sam,
     get_effort,
+    get_next_sam,
     update_effort,
 )
 from fwin_data_entry.services.fish_sample_service import (
     create_fish_sample,
-    get_next_fish,
-    get_fish_sample,
-    update_fish_sample,
     delete_fish_sample,
+    get_fish_sample,
+    get_next_fish,
+    update_fish_sample,
 )
 from fwin_data_entry.services.project_service import (
     create_project,
     get_first_project,
 )
+from fwin_data_entry.services.validation import (
+    validate_required,
+)
 from fwin_data_entry.services.workspace_service import (
+    catch_summary_exists,
+    catch_summary_record_exists,
+    effort_exists,
     get_project_samples,
     get_sample_catch_summaries,
     get_sample_details,
     get_sample_fish,
-    catch_summary_exists,
     sample_exists,
-    catch_summary_record_exists,
-    effort_exists,
-)
-
-from fwin_data_entry.services.validation import (
-    validate_required,
-)
-
-from fwin_data_entry.services.age_record_service import (
-    delete_age_records_for_fish,
-)
-
-from fwin_data_entry.services.cascade_delete_service import (
-    delete_catch_summary_children,
 )
 
 
