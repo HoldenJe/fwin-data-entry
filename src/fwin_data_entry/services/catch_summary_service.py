@@ -176,3 +176,33 @@ def get_catch_summary(
             catcnt=row[4],
             biocnt=row[5],
         )
+
+def delete_catch_summary(
+    db_path: str,
+    prj_cd: str,
+    sam: int,
+    eff: int,
+    spc: str,
+) -> None:
+    """Delete an FN123 record."""
+
+    with get_connection(db_path) as conn:
+
+        conn.execute(
+            """
+            DELETE FROM FN123
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+                AND EFF = ?
+                AND SPC = ?
+            """,
+            (
+                prj_cd,
+                sam,
+                eff,
+                spc,
+            ),
+        )
+
+        conn.commit()

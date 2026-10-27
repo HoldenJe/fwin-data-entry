@@ -40,6 +40,8 @@ from fwin_data_entry.services.catch_summary_service import (
     create_catch_summary,
     get_catch_summary,
     update_catch_summary,
+    delete_catch_summary,
+
 )
 from fwin_data_entry.services.effort_service import (
     create_effort,
@@ -76,6 +78,11 @@ from fwin_data_entry.services.validation import (
 from fwin_data_entry.services.age_record_service import (
     delete_age_records_for_fish,
 )
+
+from fwin_data_entry.services.cascade_delete_service import (
+    delete_catch_summary_children,
+)
+
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -121,6 +128,9 @@ class MainWindow(QMainWindow):
         )
         self.workspace.edit_catch_button.clicked.connect(
             self.edit_catch_summary
+        )
+        self.workspace.delete_catch_button.clicked.connect(
+            self.delete_catch_summary
         )
         self.workspace.edit_sample_button.clicked.connect(
             self.edit_sample
@@ -252,11 +262,9 @@ class MainWindow(QMainWindow):
             self.clear_workspace()
 
             self.workspace.project_label.setText(
-                (
                     f"PROJECT: {project.prj_cd}    "
                     f"{project.prj_nm}    "
                     f"{project.wby_nm}"
-                )
             )
 
             self.current_sam = None
@@ -1097,6 +1105,55 @@ class MainWindow(QMainWindow):
         )
 
         self.refresh_workspace()
+    
+    def delete_catch_summary(self):
+        """Delete selected catch summary."""
+        if self.selected_catch is None:
+            return
+
+        spc = self.selected_catch
+
+        reply = QMessageBox.question(
+            self,
+            "Delete Catch Summary",
+            (
+                f"Delete catch summary "
+                f"for SPC {spc}?\n\n"
+                "All associated fish and age "
+                "records will also be deleted.\n\n"
+                "This action cannot be undone."
+            ),
+            QMessageBox.Yes | QMessageBox.No,
+        )
+
+        if reply != QMessageBox.Yes:
+            return
+
+        delete_catch_summary_children(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+        )
+
+        delete_catch_summary(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+        )
+
+        self.selected_catch = None
+
+        self.refresh_workspace()
+
+        QMessageBox.information(
+            self,
+            "Delete Catch Summary",
+            "Deletion confirmed."
+        )
 
     def edit_sample(self):
         """Edit selected FN121 record."""
