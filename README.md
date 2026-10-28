@@ -25,6 +25,9 @@ Python desktop application for FWIN fisheries survey data entry.
 
 ## Installation
 
+A *.exe installer can be downloaded from https://github.com/HoldenJe/fwin-data-entry/releases
+
+## Alternate Installation for Python Users
 ### Clone Repository
 
 ```powershell
