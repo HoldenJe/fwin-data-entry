@@ -1,14 +1,14 @@
 """Database initialization utilities."""
 
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
 from fwin_data_entry.database.schema import (
     FN011_SQL,
     FN121_SQL,
     FN123_SQL,
     FN125_SQL,
-    FN127_SQL
+    FN127_SQL,
 )
 
 

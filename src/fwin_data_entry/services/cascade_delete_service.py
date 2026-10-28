@@ -51,3 +51,53 @@ def delete_catch_summary_children(
         )
 
         conn.commit()
+
+def delete_sample_children(
+    db_path: str,
+    prj_cd: str,
+    sam: int,
+) -> None:
+    """Delete child records for an FN121 sample."""
+
+    with get_connection(db_path) as conn:
+
+        conn.execute(
+            """
+            DELETE FROM FN127
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+            """,
+            (
+                prj_cd,
+                sam,
+            ),
+        )
+
+        conn.execute(
+            """
+            DELETE FROM FN125
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+            """,
+            (
+                prj_cd,
+                sam,
+            ),
+        )
+
+        conn.execute(
+            """
+            DELETE FROM FN123
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+            """,
+            (
+                prj_cd,
+                sam,
+            ),
+        )
+
+        conn.commit()

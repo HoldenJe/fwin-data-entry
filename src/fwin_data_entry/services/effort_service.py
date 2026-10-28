@@ -3,10 +3,11 @@
 from fwin_data_entry.database.connection import get_connection
 from fwin_data_entry.models.effort import Effort
 from fwin_data_entry.services.validation import (
-    validate_required,
+    validate_non_negative,
     validate_positive_integer,
-    validate_non_negative
+    validate_required,
 )
+
 
 def create_effort(
     db_path: str,
@@ -243,6 +244,30 @@ def update_effort(
                 effort.comment,
                 effort.prj_cd,
                 effort.sam,
+            ),
+        )
+
+        conn.commit()
+
+def delete_sample(
+    db_path: str,
+    prj_cd: str,
+    sam: int,
+) -> None:
+    """Delete an FN121 record."""
+
+    with get_connection(db_path) as conn:
+
+        conn.execute(
+            """
+            DELETE FROM FN121
+            WHERE
+                PRJ_CD = ?
+                AND SAM = ?
+            """,
+            (
+                prj_cd,
+                sam,
             ),
         )
 

@@ -40,6 +40,7 @@ from fwin_data_entry.services.age_record_service import (
 )
 from fwin_data_entry.services.cascade_delete_service import (
     delete_catch_summary_children,
+    delete_sample_children,
 )
 from fwin_data_entry.services.catch_summary_service import (
     create_catch_summary,
@@ -49,6 +50,7 @@ from fwin_data_entry.services.catch_summary_service import (
 )
 from fwin_data_entry.services.effort_service import (
     create_effort,
+    delete_sample,
     get_effort,
     get_next_sam,
     update_effort,
@@ -120,6 +122,9 @@ class MainWindow(QMainWindow):
 
         self.workspace.edit_fish_button.clicked.connect(
            self.edit_fish
+        )
+        self.workspace.delete_sample_button.clicked.connect(
+            self.delete_sample
         )
         self.workspace.edit_catch_button.clicked.connect(
             self.edit_catch_summary
@@ -763,6 +768,7 @@ class MainWindow(QMainWindow):
 
         self.current_sam = sam
         self.workspace.edit_sample_button.setEnabled(True)
+        self.workspace.delete_sample_button.setEnabled(True)
         effort = get_sample_details(
             self.current_database,
             self.current_project.prj_cd,
@@ -1230,6 +1236,53 @@ class MainWindow(QMainWindow):
             break
 
         self.refresh_workspace()
+
+    def delete_sample(self):
+        """Delete selected sample."""
+
+        if self.current_sam is None:
+            return
+
+        reply = QMessageBox.question(
+            self,
+            "Delete Sample",
+            (
+                f"Delete sample "
+                f"SAM {self.current_sam}?\n\n"
+                "All associated catch summaries,\n"
+                "fish records, and age records\n"
+                "will also be deleted.\n\n"
+                "This action cannot be undone."
+            ),
+            QMessageBox.Yes | QMessageBox.No,
+        )
+
+        if reply != QMessageBox.Yes:
+            return
+
+        delete_sample_children(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+        )
+
+        delete_sample(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+        )
+
+        deleted_sam = self.current_sam
+
+        self.clear_workspace()
+
+        self.refresh_workspace()
+
+        QMessageBox.information(
+            self,
+            "Delete Sample",
+            f"SAM {deleted_sam} deleted."
+        )
 
     def clear_workspace(self):
         """Clear sample-specific workspace data."""

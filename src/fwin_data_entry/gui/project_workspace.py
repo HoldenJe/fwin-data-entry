@@ -1,17 +1,16 @@
 """Project workspace."""
 
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QPushButton,
     QHBoxLayout,
     QLabel,
     QListWidget,
+    QPushButton,
+    QTableWidget,
     QVBoxLayout,
     QWidget,
-    QTableWidget,
-    QTableWidgetItem,
-    )
+)
 
-from PySide6.QtGui import QFont
 
 class ProjectWorkspace(QWidget):
     """Project workspace."""
@@ -66,6 +65,9 @@ class ProjectWorkspace(QWidget):
         )
         self.edit_sample_button = QPushButton(
             "Edit Sample"
+        )
+        self.delete_sample_button = QPushButton(
+            "Delete Sample"
         )
         self.catch_table = QTableWidget()
 
@@ -134,22 +136,26 @@ class ProjectWorkspace(QWidget):
             self.edit_sample_button
         )
         right_layout.addWidget(
+            self.delete_sample_button
+        )
+        right_layout.addWidget(
             self.catch_heading
         )
 
         right_layout.addWidget(
             self.catch_table
         )
-        right_layout.addWidget(
-            self.edit_catch_button
-        )
-
-        right_layout.addWidget(
-            self.delete_catch_button
-        )
+        
         right_layout.addWidget(
             self.add_catch_button
         )
+        right_layout.addWidget(
+            self.edit_catch_button
+        )
+        right_layout.addWidget(
+            self.delete_catch_button
+        )
+        
         right_layout.addWidget(
             self.fish_heading
         )
@@ -158,6 +164,10 @@ class ProjectWorkspace(QWidget):
             self.fish_table
         )
         right_layout.addWidget(
+            self.add_fish_button
+        )
+
+        right_layout.addWidget(
             self.edit_fish_button
         )
 
@@ -165,10 +175,6 @@ class ProjectWorkspace(QWidget):
             self.delete_fish_button
         )
         
-        right_layout.addWidget(
-            self.add_fish_button
-        )
-
         layout = QHBoxLayout()
 
         layout.addLayout(left_layout, 1)
@@ -177,6 +183,7 @@ class ProjectWorkspace(QWidget):
         self.setLayout(layout)
         
         self.edit_sample_button.setEnabled(False)
+        self.delete_sample_button.setEnabled(False)
         self.edit_catch_button.setEnabled(False)
         self.delete_catch_button.setEnabled(False)
 
