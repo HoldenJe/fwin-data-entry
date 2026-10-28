@@ -34,7 +34,8 @@ class ProjectWorkspace(QWidget):
         self.add_sam_button = QPushButton(
             "Add SAM"
         )
-
+        self.add_sam_button.setAutoDefault(True)
+                
         self.sample_heading = QLabel(
             "FN121"
         )
@@ -66,9 +67,12 @@ class ProjectWorkspace(QWidget):
         self.edit_sample_button = QPushButton(
             "Edit Sample"
         )
+        self.edit_sample_button.setAutoDefault(True)
+        
         self.delete_sample_button = QPushButton(
             "Delete Sample"
         )
+        self.delete_sample_button.setAutoDefault(True)
         self.catch_table = QTableWidget()
 
         self.catch_table.setColumnCount(3)
@@ -83,10 +87,13 @@ class ProjectWorkspace(QWidget):
         self.edit_catch_button = QPushButton(
             "Edit Catch Summary"
         )
+        self.edit_catch_button.setAutoDefault(True)
 
         self.delete_catch_button = QPushButton(
             "Delete Catch Summary"
         )
+        self.delete_catch_button.setAutoDefault(True)
+        
         self.fish_table = QTableWidget()
 
         self.fish_table.setColumnCount(5)
@@ -103,17 +110,23 @@ class ProjectWorkspace(QWidget):
         self.edit_fish_button = QPushButton(
             "Edit Fish"
         )
+        self.edit_fish_button.setAutoDefault(True)
 
         self.delete_fish_button = QPushButton(
             "Delete Fish"
         )
+        self.delete_fish_button.setAutoDefault(True)
+
         self.add_catch_button = QPushButton(
             "Add Catch Summary"
         )
+        self.add_catch_button.setAutoDefault(True)
 
         self.add_fish_button = QPushButton(
             "Add Fish Sample"
         )
+        self.add_fish_button.setAutoDefault(True)
+        
         left_layout = QVBoxLayout()
         left_layout.addWidget(QLabel("Samples"))
         left_layout.addWidget(self.sam_list)
