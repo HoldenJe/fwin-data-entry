@@ -133,7 +133,7 @@ catch_summary
 
 ## Development Status
 
-Current release: v0.4.0
+Current release: v0.5.0
 
 This application is currently being tested by FWIN users. Feedback on workflow, validation, and usability is encouraged.
 

@@ -1,3 +1,34 @@
+## [0.5.0] - 2026-10-27
+
+### Added
+
+- FN127 database schema and migration support
+- FN125 comment field support
+- FN125 record deletion
+- FN123 cascading deletion
+- FN121 cascading deletion
+- Keyboard activation of workspace buttons using Enter
+- Date input masks for FN121 effort records
+- Time input masks for FN121 effort records
+
+### Changed
+
+- Comment fields converted from multi-line to single-line controls
+- Improved keyboard navigation throughout data-entry dialogs
+- Added format guidance for date and time fields
+- Improved workflow for keyboard-only data entry
+
+### Fixed
+
+- Workspace refresh after FN121, FN123 and FN125 deletions
+- Selection-state handling after record deletion
+- Child record cleanup during parent record deletion
+
+### Database
+
+- Added FN127 table
+- Added automatic FN127 migration support for existing databases
+
 # FWIN Data Entry v0.4.0
 
 ## Highlights
