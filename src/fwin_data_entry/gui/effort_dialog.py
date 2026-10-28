@@ -32,6 +32,13 @@ class EffortDialog(QDialog):
 
         self.effdt0 = QLineEdit()
         self.efftm0 = QLineEdit()
+        self.effdt0.setInputMask(
+            "0000-00-00"
+        )
+
+        self.efftm0.setInputMask(
+            "00:00"
+        )
         self.sitem0 = QLineEdit()
 
         self.grdepmin = QLineEdit()
@@ -39,7 +46,13 @@ class EffortDialog(QDialog):
 
         self.effdt1 = QLineEdit()
         self.efftm1 = QLineEdit()
+        self.effdt1.setInputMask(
+            "0000-00-00"
+        )
 
+        self.efftm1.setInputMask(
+            "00:00"
+        )
         self.effst = QLineEdit()
         self.dd_lat0 = QLineEdit()
         self.dd_lon0 = QLineEdit()
@@ -55,16 +68,16 @@ class EffortDialog(QDialog):
         form.addRow("SAM", self.sam)
         form.addRow("GR", self.gr)
         form.addRow("AREA", self.area)
-        form.addRow("Set Date", self.effdt0)
-        form.addRow("Set Time", self.efftm0)
+        form.addRow("Set Date  (yyyy-mm-dd)", self.effdt0)
+        form.addRow("Set Time (hh:mm)", self.efftm0)
         form.addRow("Site Temp", self.sitem0)
         form.addRow("Latitude", self.dd_lat0)
         form.addRow("Longitude", self.dd_lon0)
         form.addRow("Secchi", self.secchi)
         form.addRow("Min Gear Depth", self.grdepmin)
         form.addRow("Max Gear Depth", self.grdepmax)
-        form.addRow("Lift Date", self.effdt1)
-        form.addRow("Lift Time", self.efftm1)
+        form.addRow("Lift Date (yyyy-mm-dd)", self.effdt1)
+        form.addRow("Lift Time (hh:mm)", self.efftm1)
         form.addRow("Effort Status", self.effst)
         form.addRow("Crew", self.crew)
         form.addRow("Comment", self.comment)
