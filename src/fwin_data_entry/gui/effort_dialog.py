@@ -5,7 +5,6 @@ from PySide6.QtWidgets import (
     QFormLayout,
     QLineEdit,
     QPushButton,
-    QTextEdit,
     QVBoxLayout,
 )
 
@@ -61,7 +60,7 @@ class EffortDialog(QDialog):
 
         self.crew = QLineEdit()
 
-        self.comment = QTextEdit()
+        self.comment = QLineEdit()
 
         form = QFormLayout()
 
@@ -162,7 +161,7 @@ class EffortDialog(QDialog):
             "effst": self.effst.text(),
 
             "crew": self.crew.text(),
-            "comment": self.comment.toPlainText(),
+            "comment": self.comment.text(),
         }
 
     def load_effort(
@@ -224,7 +223,7 @@ class EffortDialog(QDialog):
 
         self.crew.setText(effort.crew)
 
-        self.comment.setPlainText(
+        self.comment.setText(
             effort.comment
         )
 
