@@ -27,6 +27,7 @@ def initialize_database(db_path: str) -> None:
         cursor.execute(FN127_SQL)
 
         ensure_fn125_comment_column(conn)
+        ensure_fn125_eggcnt_column(conn)
         ensure_fn127_table(conn)
 
         conn.commit()
@@ -66,3 +67,30 @@ def ensure_fn127_table(
     """Create FN127 table if missing."""
 
     conn.execute(FN127_SQL)
+
+def ensure_fn125_eggcnt_column(
+    conn: sqlite3.Connection,
+) -> None:
+    """Add EGGCNT column to FN125 if missing."""
+
+    cursor = conn.execute(
+        "PRAGMA table_info(FN125)"
+    )
+
+    columns = [
+        row[1]
+        for row in cursor.fetchall()
+    ]
+
+    if "EGGCNT" not in columns:
+
+        conn.execute(
+            """
+            ALTER TABLE FN125
+            ADD COLUMN EGGCNT INTEGER
+            """
+        )
+
+        print(
+            "Migrated FN125: added EGGCNT column"
+        )
