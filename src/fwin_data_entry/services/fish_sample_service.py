@@ -28,11 +28,12 @@ def create_fish_sample(
                 STOM,
                 TAXON,
                 GONWT,
+                EGGCNT,
                 EVISWT,
                 TISSUE,
                 COMMENT
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 fish_sample.prj_cd,
@@ -49,6 +50,7 @@ def create_fish_sample(
                 fish_sample.stom,
                 fish_sample.taxon,
                 fish_sample.gonwt,
+                fish_sample.eggcnt,
                 fish_sample.eviswt,
                 fish_sample.tissue,
                 fish_sample.comment,
@@ -71,7 +73,25 @@ def get_fish_sample(
     with get_connection(db_path) as conn:
         cursor = conn.execute(
             """
-            SELECT *
+            SELECT
+                PRJ_CD,
+                SAM,
+                EFF,
+                SPC,
+                FISH,
+                FLEN,
+                TLEN,
+                RWT,
+                SEX,
+                MAT,
+                AGEST,
+                STOM,
+                TAXON,
+                GONWT,
+                EGGCNT,
+                EVISWT,
+                TISSUE,
+                COMMENT
             FROM FN125
             WHERE PRJ_CD = ?
               AND SAM = ?
@@ -108,9 +128,10 @@ def get_fish_sample(
         stom=row[11],
         taxon=row[12],
         gonwt=row[13],
-        eviswt=row[14],
-        tissue=row[15],
-        comment=row[16],
+        eggcnt=row[14],
+        eviswt=row[15],
+        tissue=row[16],
+        comment=row[17],
     )
     
 def get_next_fish(
@@ -168,6 +189,7 @@ def update_fish_sample(
                 STOM = ?,
                 TAXON = ?,
                 GONWT = ?,
+                EGGCNT = ?,
                 EVISWT = ?,
                 TISSUE = ?,
                 COMMENT = ?
@@ -188,6 +210,7 @@ def update_fish_sample(
                 fish_sample.stom,
                 fish_sample.taxon,
                 fish_sample.gonwt,
+                fish_sample.eggcnt,
                 fish_sample.eviswt,
                 fish_sample.tissue,
                 fish_sample.comment,

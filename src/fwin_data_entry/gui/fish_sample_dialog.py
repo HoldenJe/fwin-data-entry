@@ -44,6 +44,7 @@ class FishSampleDialog(QDialog):
         self.taxon = QLineEdit()
 
         self.gonwt = QLineEdit()
+        self.eggcnt = QLineEdit()
         self.eviswt = QLineEdit()
 
         self.tissue = QLineEdit()
@@ -68,6 +69,7 @@ class FishSampleDialog(QDialog):
         form.addRow("TAXON", self.taxon)
 
         form.addRow("GONWT", self.gonwt)
+        form.addRow("EGGCNT", self.eggcnt)
         form.addRow("EVISWT", self.eviswt)
 
         form.addRow("TISSUE", self.tissue)
@@ -145,6 +147,7 @@ class FishSampleDialog(QDialog):
             "stom": self.stom.text(),
             "taxon": self.taxon.text(),
             "gonwt": self.gonwt.text(),
+            "eggcnt": self.eggcnt.text(),
             "eviswt": self.eviswt.text(),
             "tissue": self.tissue.text(),
             "comment": self.comment.text(),
@@ -181,6 +184,7 @@ class FishSampleDialog(QDialog):
         self.taxon.clear()
 
         self.gonwt.clear()
+        self.eggcnt.clear()
         self.eviswt.clear()
 
         self.tissue.clear()
@@ -228,7 +232,10 @@ class FishSampleDialog(QDialog):
             "" if fish_sample.gonwt is None
             else str(fish_sample.gonwt)
         )
-
+        self.eggcnt.setText(
+            "" if fish_sample.eggcnt is None
+            else str(fish_sample.eggcnt)
+        )
         self.eviswt.setText(
             "" if fish_sample.eviswt is None
             else str(fish_sample.eviswt)

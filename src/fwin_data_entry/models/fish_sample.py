@@ -25,6 +25,7 @@ class FishSample:
     taxon: str = ""
 
     gonwt: float | None = None
+    eggcnt: int | None = None
     eviswt: float | None = None
 
     tissue: str = ""
