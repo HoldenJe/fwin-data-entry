@@ -669,6 +669,9 @@ class MainWindow(QMainWindow):
                 gonwt=float(data["gonwt"])
                 if data["gonwt"]
                 else None,
+                eggcnt=int(data["eggcnt"])
+                if data["eggcnt"]
+                else None,
                 eviswt=float(data["eviswt"])
                 if data["eviswt"]
                 else None,
@@ -1000,6 +1003,9 @@ class MainWindow(QMainWindow):
             taxon=data["taxon"],
             gonwt=float(data["gonwt"])
             if data["gonwt"]
+            else None,
+            eggcnt=int(data["eggcnt"])
+            if data["eggcnt"]
             else None,
             eviswt=float(data["eviswt"])
             if data["eviswt"]
