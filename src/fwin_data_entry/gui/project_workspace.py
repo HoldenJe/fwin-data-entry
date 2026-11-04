@@ -126,7 +126,13 @@ class ProjectWorkspace(QWidget):
             "Add Fish Sample"
         )
         self.add_fish_button.setAutoDefault(True)
-        
+        self.add_age_button = QPushButton(
+            "Add Age Data"
+        )
+
+        self.add_age_button.setEnabled(
+            False
+        )
         left_layout = QVBoxLayout()
         left_layout.addWidget(QLabel("Samples"))
         left_layout.addWidget(self.sam_list)
@@ -179,7 +185,9 @@ class ProjectWorkspace(QWidget):
         right_layout.addWidget(
             self.add_fish_button
         )
-
+        right_layout.addWidget(
+            self.add_age_button
+        )
         right_layout.addWidget(
             self.edit_fish_button
         )
