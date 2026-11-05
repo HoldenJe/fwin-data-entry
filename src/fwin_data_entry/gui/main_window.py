@@ -1083,66 +1083,7 @@ class MainWindow(QMainWindow):
             "Fish deleted."
         )
 
-    def add_age_data(self):
-        """Create FN127 record."""
-
-        if self.selected_fish is None:
-            return
-
-        fish_number, spc = self.selected_fish
-
-        ageid = get_next_ageid(
-            self.current_database,
-            self.current_project.prj_cd,
-            self.current_sam,
-            999,
-            spc,
-            fish_number,
-        )
-
-        dialog = AgeRecordDialog(
-            ageid=ageid,
-        )
-
-        if not dialog.exec():
-            return
-
-        data = dialog.get_data()
-
-        record = AgeRecord(
-            prj_cd=self.current_project.prj_cd,
-            sam=self.current_sam,
-            eff=999,
-            spc=spc,
-            fish=fish_number,
-            ageid=int(data["ageid"]),
-            agemt=data["agemt"],
-            agea=int(data["agea"])
-            if data["agea"]
-            else None,
-            nca=int(data["nca"])
-            if data["nca"]
-            else None,
-            edge=data["edge"],
-            conf=int(data["conf"])
-            if data["conf"]
-            else None,
-        )
-
-        create_age_record(
-            self.current_database,
-            record,
-        )
-
-        QMessageBox.information(
-            self,
-            "Success",
-            (
-                f"Saved AGEID "
-                f"{record.ageid}"
-            ),
-        )
-
+    
     def edit_catch_summary(self):
         """Edit selected catch summary."""
 
