@@ -12,6 +12,9 @@ from PySide6.QtWidgets import (
 from fwin_data_entry.database.initialize import (
     initialize_database,
 )
+from fwin_data_entry.gui.age_record_dialog import (
+    AgeRecordDialog,
+)
 from fwin_data_entry.gui.catch_summary_dialog import (
     CatchSummaryDialog,
 )
@@ -27,6 +30,9 @@ from fwin_data_entry.gui.project_dialog import (
 from fwin_data_entry.gui.project_workspace import (
     ProjectWorkspace,
 )
+from fwin_data_entry.models.age_record import (
+    AgeRecord,
+)
 from fwin_data_entry.models.catch_summary import (
     CatchSummary,
 )
@@ -36,7 +42,9 @@ from fwin_data_entry.models.fish_sample import (
 )
 from fwin_data_entry.models.project import Project
 from fwin_data_entry.services.age_record_service import (
+    create_age_record,
     delete_age_records_for_fish,
+    get_next_ageid,
 )
 from fwin_data_entry.services.cascade_delete_service import (
     delete_catch_summary_children,
@@ -106,6 +114,9 @@ class MainWindow(QMainWindow):
 
         self.workspace.add_fish_button.clicked.connect(
             self.new_fish_sample
+        )
+        self.workspace.add_age_button.clicked.connect(
+            self.add_age_data
         )
         self.workspace.add_sam_button.clicked.connect(
             self.new_effort
@@ -920,6 +931,9 @@ class MainWindow(QMainWindow):
         self.workspace.delete_fish_button.setEnabled(
             enabled
         )
+        self.workspace.add_age_button.setEnabled(
+            enabled
+        )
 
         if enabled:
 
@@ -1069,6 +1083,7 @@ class MainWindow(QMainWindow):
             "Fish deleted."
         )
 
+    
     def edit_catch_summary(self):
         """Edit selected catch summary."""
 
@@ -1322,7 +1337,70 @@ class MainWindow(QMainWindow):
         self.workspace.delete_fish_button.setEnabled(
             False
         )
+        self.workspace.add_age_button.setEnabled(
+            False
+        )
         self.workspace.sam_list.clearSelection()
 
         self.selected_fish = None
         self.selected_catch = None
+
+    def add_age_data(self):
+        """Create FN127 record."""
+
+        if self.selected_fish is None:
+            return
+
+        fish_number, spc = self.selected_fish
+
+        ageid = get_next_ageid(
+            self.current_database,
+            self.current_project.prj_cd,
+            self.current_sam,
+            999,
+            spc,
+            fish_number,
+        )
+
+        dialog = AgeRecordDialog(
+            ageid=ageid,
+        )
+
+        if not dialog.exec():
+            return
+
+        data = dialog.get_data()
+
+        record = AgeRecord(
+            prj_cd=self.current_project.prj_cd,
+            sam=self.current_sam,
+            eff=999,
+            spc=spc,
+            fish=fish_number,
+            ageid=int(data["ageid"]),
+            agemt=data["agemt"],
+            agea=int(data["agea"])
+            if data["agea"]
+            else None,
+            nca=int(data["nca"])
+            if data["nca"]
+            else None,
+            edge=data["edge"],
+            conf=int(data["conf"])
+            if data["conf"]
+            else None,
+        )
+
+        create_age_record(
+            self.current_database,
+            record,
+        )
+
+        QMessageBox.information(
+            self,
+            "Success",
+            (
+                f"Saved AGEID "
+                f"{record.ageid}"
+            ),
+        )
