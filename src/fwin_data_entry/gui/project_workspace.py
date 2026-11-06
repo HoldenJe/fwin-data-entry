@@ -140,61 +140,51 @@ class ProjectWorkspace(QWidget):
 
         right_layout = QVBoxLayout()
         
-        right_layout.addWidget(
-            self.project_label
-        )
+        sample_section = QHBoxLayout()
 
-        right_layout.addWidget(
-            self.sample_heading
-        )
+        sample_info = QVBoxLayout()
+        sample_info.addWidget(self.sample_details)
 
-        right_layout.addWidget(
-            self.sample_details
-        )
-        right_layout.addWidget(
-            self.edit_sample_button
-        )
-        right_layout.addWidget(
-            self.delete_sample_button
-        )
-        right_layout.addWidget(
-            self.catch_heading
-        )
+        sample_buttons = QVBoxLayout()
+        sample_buttons.addWidget(self.edit_sample_button)
+        sample_buttons.addWidget(self.delete_sample_button)
+        sample_buttons.addStretch()
 
-        right_layout.addWidget(
-            self.catch_table
-        )
+        sample_section.addLayout(sample_info, 4)
+        sample_section.addLayout(sample_buttons, 1)
+
+        right_layout.addLayout(sample_section)
+
+        catch_section = QHBoxLayout()
         
-        right_layout.addWidget(
-            self.add_catch_button
-        )
-        right_layout.addWidget(
-            self.edit_catch_button
-        )
-        right_layout.addWidget(
-            self.delete_catch_button
-        )
+        catch_buttons = QVBoxLayout()
+        catch_buttons.addWidget(self.add_catch_button)
+        catch_buttons.addWidget(self.edit_catch_button)
+        catch_buttons.addWidget(self.delete_catch_button)
+        catch_buttons.addStretch()
+
+        catch_section.addWidget(self.catch_table, 4)
+        catch_section.addLayout(catch_buttons, 1)
+
+        right_layout.addLayout(catch_section)
         
         right_layout.addWidget(
             self.fish_heading
         )
 
-        right_layout.addWidget(
-            self.fish_table
-        )
-        right_layout.addWidget(
-            self.add_fish_button
-        )
-        right_layout.addWidget(
-            self.add_age_button
-        )
-        right_layout.addWidget(
-            self.edit_fish_button
-        )
+        fish_section = QHBoxLayout()
 
-        right_layout.addWidget(
-            self.delete_fish_button
-        )
+        fish_buttons = QVBoxLayout()
+        fish_buttons.addWidget(self.add_fish_button)
+        fish_buttons.addWidget(self.add_age_button)
+        fish_buttons.addWidget(self.edit_fish_button)
+        fish_buttons.addWidget(self.delete_fish_button)
+        fish_buttons.addStretch()
+
+        fish_section.addWidget(self.fish_table, 4)
+        fish_section.addLayout(fish_buttons, 1)
+
+        right_layout.addLayout(fish_section)
         
         layout = QHBoxLayout()
 
