@@ -645,20 +645,21 @@ class MainWindow(QMainWindow):
 
                 continue
 
-            next_fish = get_next_fish(
+            '''next_fish = get_next_fish(
                 self.current_database,
                 self.current_project.prj_cd,
                 int(data["sam"]),
                 999,
                 str(data["spc"]),
-            )
+            )'''
 
             record = FishSample(
                 prj_cd=self.current_project.prj_cd,
                 sam=int(data["sam"]),
                 eff=999,
                 spc=data["spc"].zfill(3),
-                fish=next_fish,
+                fish=int(data["fish"])
+                if data["fish"] else None,
                 flen=float(data["flen"])
                 if data["flen"]
                 else None,
