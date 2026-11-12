@@ -171,6 +171,7 @@ class FishSampleDialog(QDialog):
     def clear_fish_fields(self):
         """Prepare for next fish."""
 
+        self.fish.clear()
         self.flen.clear()
         self.tlen.clear()
         self.rwt.clear()
@@ -190,7 +191,7 @@ class FishSampleDialog(QDialog):
         self.tissue.clear()
         self.comment.clear()
 
-        self.flen.setFocus()
+        self.fish.setFocus()
 
     def load_fish(self, fish_sample):
         """Populate dialog with existing data."""
